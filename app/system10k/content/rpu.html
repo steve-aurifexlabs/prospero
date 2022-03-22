@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <title>Reconfigurable Processing Unit (RPU)</title>
+    </head>
+
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        button {
+            font-family: sans-serif;
+        }
+
+        form {
+            padding: 1em;
+            border: 1px solid #333; 
+        }
+
+        canvas {
+            background: #000;
+            margin: 20px
+        }
+    </style>
+    
+    <body>
+        <h1>Reconfigurable Processing Unit (RPU)</h1>
+
+        <p>
+            FPGA + ARM emulator.
+        </p>
+
+        <div style="display: grid; grid-auto-flow: column;">
+            <div name="vm">
+                <h2>Virtual Machine</h2>
+                <canvas width=480 height=270></canvas>
+            </div>
+            
+            <div name="display">
+                <h2>Display</h2>
+                <canvas width=480 height=270></canvas>
+            </div>
+        </div>
+
+        <div name="source-code">
+            <h2>Source Code</h2>
+            <pre></pre>
+        </div>
+    </body>
+    
+    <script>
+        window.addEventListener('load', function() {
+            drawFPGA()
+        })
+
+        function drawFPGA() {
+            var canvas = document.querySelector('canvas')
+            var canvasContext = canvas.getContext('2d')
+            
+            canvasContext.fillStyle = '#222'
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height)
+            
+            canvasContext.fillStyle = '#777'
+            var d = 5
+            for(var i = 0; i < d * canvas.height; i++) {
+                canvasContext.beginPath()
+                canvasContext.moveTo(0, i * d)
+                canvasContext.lineTo(canvas.width, i * d)
+                canvasContext.stroke()   
+            }
+            for(var i = 0; i < d * canvas.width; i++) {
+                canvasContext.beginPath()
+                canvasContext.moveTo(i * d, 0)
+                canvasContext.lineTo(i * d, canvas.height)
+                canvasContext.stroke()   
+            }
+
+            canvasContext.fillStyle = '#ccc'
+            canvasContext.font = '14px "sans-serif"'
+            canvasContext.fillText('FPGA', 5, 20)
+        }
+
+    </script>
+</html>

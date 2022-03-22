@@ -1,0 +1,20 @@
+var thermostat = {
+	type: 'module',
+	subtype: 'digital_asic',
+	name: 'thermostat',
+	components: {
+		
+		alu_multiplier: 'https://raw.githubusercontent.com/arjunrajasekharan/16-bit-DADDA-Multiplier/main/dadda.v',
+	},
+	ports: {
+		input: {
+			'up_button': {
+			},
+			'down_button': {
+			},
+			'temperature_0': {
+			}, 'temperature_1'],
+		output: [{, 'digit1'],
+		debug: ['jtag'],
+	},
+}

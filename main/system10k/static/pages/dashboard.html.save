@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico">
+        <title>Dashboard | Prospero.Live</title>
+        <link href="/static/css/theme.css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <p class="big-title">Prospero.Live</p>
+            
+	    <details>
+            	<summary>
+		    <span>You are logged in as </span>
+            	    <br>
+            	    <b name="email">Loading...</b>
+            	</summary>
+		<br>
+            	<span name="plan"></span>
+		<span> </span>
+            	<button id="select-plan">Upgrade</button>
+            	<button class="hidden" id="manage-billing">Manage Billing</button>
+            	<p id="storage"></p>
+		<br>
+		<p>Register </p>
+            	<br>
+		<button name="logout">Logout</button>
+		<span> </span>
+            	<button name="refresh">Refresh</button>
+            </details>
+        </header>
+
+        <p id="teams-message">Loading your teams...</p>
+
+	<div id="teams-div"></div>
+        
+        <form name="new-team">
+            <h2>Start pairing with ...</h2>
+            <label name="partner-email">Email</label>
+            <br>
+            <input type="text" name="partner-email">
+            
+            <button type="submit">Create new pair project</button>
+            <p name="message"></p>
+        </form>
+
+        <footer>
+            <p>
+                <a href="/">Home</a>
+                <a href="/terms-of-service" target="_blank">Terms of Service</a>
+                <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                <a href="/cookies-policy" target="_blank">Cookies Policy</a>
+                <a href="mailto:contact@prospero.live">Contact</a>
+                <span>Copyright 2020-2021 Aurifex Labs LLC</span>
+                <img src="/static/images/footer.jpg">
+            </p>
+        </footer>
+        
+        <script src="/static/javascript/dashboard.js"></script>
+    </body>
+</html>
+        

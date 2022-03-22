@@ -1,0 +1,172 @@
+header {
+    text-align: center;
+}
+
+#main-title {
+    margin-bottom: 0px;
+    font-size: 350%;
+}
+
+#tag-first-line {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 125%;
+}
+
+#tag-second-line {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 100%;
+}
+
+#main-description {
+    font-size: 300%;
+    display: block;
+}
+
+#top-form {
+    font-size: 110%;
+}
+
+#top-form input {
+    margin: 5px; font-size: 110%;
+}
+
+#top-form button {
+    font-size: 125%;
+    padding: 17px;
+    margin: 5px;
+}
+
+#top-button-first-line {
+    font-size: 110%;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+#top-button-second-line {
+    margin-top: 0;
+    font-size: 75%;
+}
+
+form button {
+    animation: pulse 6s infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: rgb(193, 251, 138);
+    }
+
+    90% {
+        background-color: rgb(193, 251, 138);
+    }
+
+    100% {
+        background-color: rgb(255, 225, 57);
+    }
+}
+
+video {
+    float: right;
+    margin: 15px;
+    width: 49%;
+    box-shadow: 1px 1px 1px 1px #ccc;
+}
+
+#features-div {
+    padding-bottom: 70px;
+}
+
+#features {
+    font-size: 200%;
+}
+
+#features li {
+    /*cursor: pointer;*/
+}
+
+#team-image {
+    float: right;
+    margin: 5px;
+    max-width: 55%;
+    box-shadow: 1px 1px 1px 1px #ccc;
+}
+
+.plans div {
+    border: 1px solid #aaa;
+    background-color: #fff;
+    padding: 25px;
+    margin: 2%;
+    border-radius: 10px;
+    width: 310px;
+    max-width: 80%;
+    box-shadow: 1px 1px 1px 1px #ddd;
+    display: inline-block;
+}
+
+.price-p {
+    margin-bottom: -24px;
+}
+
+.price {
+    font-size: 300%;
+}
+
+#bottom-form {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 250%;
+}
+
+#bottom-form input {
+    max-width: 80%;
+    width: 585px;
+    margin: 5px;
+    font-size: 125%;
+}
+
+#bottom-form button {
+    max-width: 80%;
+    width: 600px;
+    margin-left: 0px;
+    margin-top: 25px;
+}
+
+#bottom-button-first-line {
+    font-size: 350%;
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+#bottom-button-second-line {
+    margin-top: 0;
+    font-size: 150%;
+}
+
+#top-email-auth, #bottom-email-auth {
+    display: none;
+    font-size: 150%;
+}
+
+#top-email-auth button, #bottom-email-auth button {
+    font-size: 80%;
+}
+
+#bottom-email-auth {
+    text-align: center;
+}
+
+features small {
+	font-size: 50%;
+}
+
+#features li+li {
+	margin-top: 20px;
+}
+
+h2 {
+	text-decoration: underline;
+}

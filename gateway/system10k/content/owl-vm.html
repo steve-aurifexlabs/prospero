@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Owl VM | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Owl VM</h1>
+</header>
+
+<div>
+    <p>A visual virtual machine. Hex digits with 16-bit words. Looks like a virtual microprocessor. 1KB pages.</p>
+</div>
+
+<div>
+    <h2>Memory</h2>
+    <canvas width="512" height="512" style="border: 1px black solid;"></canvas>
+</div>
+
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                document.querySelector('header [name="email"]').textContent = 'You are not logged in.'
+                // location.href = '/'
+                drawVM()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function loadPage(user) {
+        document.querySelector('header [name="email"]').textContent = user.email
+        drawVM()
+    }
+    
+    function drawVM() {
+        var canvas = document.querySelector('canvas')
+        var c = canvas.getContext('2d')
+
+        c.fillStyle = 'white'
+        c.beginPath()
+        c.rect(0, 0, canvas.width, canvas.height)
+        c.fill()
+
+        c.strokeStyle = 'lightgrey'
+        for(var i=0; i<64; i++) {
+            c.beginPath()
+            c.moveTo(i * 8, 0)
+            c.lineTo(i * 8, canvas.height)
+            c.stroke()
+        }
+
+        for(var j=0; j<32; j++) {
+            c.beginPath()
+            c.moveTo(0, j * 16)
+            c.lineTo(canvas.width, j * 16)
+            c.stroke()
+        }
+
+        var memory = 'f865607ad804b947245732bb51357b2f576c880cba83c1f08b58303b52f4719d38d6941bba63b27cb5fa54e5a20e5ca61e4161426af61713bc27a054a2052c97a54bee71e202d46e1ca16ef5cc0e3ebd99f26'
+
+        c.font = '8px monospace'
+        c.fillStyle = 'black'
+        
+        memory.split('').forEach(function(char, n) {
+            c.fillText(char, ((n % 64) * 8) + 2, (Math.floor(n / 64) * 16) + 12)
+        })
+
+    }
+</script>
+
+</body>
+</html>
+        

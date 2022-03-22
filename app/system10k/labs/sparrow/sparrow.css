@@ -1,0 +1,124 @@
+body {
+    font-family: 'Manrope', sans-serif;
+    background: radial-gradient(circle at top right, yellow 0%, white 18%);
+    background-repeat: no-repeat;
+}
+
+footer {
+    margin-left: 250px;
+    font-size: 50%;
+}
+
+button {
+    border-radius: 15px;
+    background: #eee;
+    margin: 20px;
+    padding: 10px;
+    font-family: 'Manrope', sans-serif;
+    /* font-weight: 700; */
+    font-size: 130%;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+.message {
+    font-size: 250%;
+    margin: 30px;
+    padding: 12px;
+    border: 3px dashed grey;
+    border-radius: 0 5px;
+    color: grey;
+    font-family: 'Oxygen Mono', monospace;
+    /* background: #eee; */
+}
+
+div.team {
+    display: inline-block;
+    margin: 5px;
+}
+
+div.team h2 {
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+canvas {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+#a h2, #b h2, #c h2, #d h2{
+    margin-left: 11px;
+}
+
+#a {
+    color: purple;
+}
+
+#a canvas {
+    border: 3px solid purple;
+}
+
+#b {
+    color: blue;
+}
+#b canvas {
+    border: 3px solid blue;
+}
+
+#c {
+    color: orange;
+}
+
+#c canvas {
+    border: 3px solid orange;
+}
+
+#d {
+    color: red;
+}
+
+#d canvas {
+    border: 3px solid red;
+}
+
+#e {
+    color: brown;
+    margin-left: 25px;
+}
+
+#e canvas {
+    border: 3px solid brown;
+}
+
+
+#f {
+    color: green;
+    margin-left: 25px;
+    font-size: 90%;
+    width: 210px;
+}
+
+#f canvas {
+    border: 3px solid grey;
+}
+
+#f > div {
+    height: 430px;
+    border: 3px solid green;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: white;
+}
+
+canvas#timeline {
+    display: block;
+}
+
+#center {
+    display: inline-block;
+    border: 1px solid black;
+}

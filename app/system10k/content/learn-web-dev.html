@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Web development in 10 minutes | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Web development in 10 minutes</h1>
+</header>
+
+<!-- <div>Prerequisites: <a href="/content/learn-programming">Programming in 10 minutes</a></div> -->
+
+<div>
+    <p>1) <b>HTML</b> describes the <b>layout</b> and <b>content</b> of a web page using pairs of <b>tags</b> to form <b>elements</b>. Elements may have <b>attributes</b>.</p>
+    
+    <pre>
+&lt;h1&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;h1-h7 are header tags. p is for paragraph. a is &lt;a href="https://aurifexlabs.com"&gt;link&lt;/a&gt;. img is for image.&lt;/p&gt;
+</pre>
+    <button name="1" type="button">Run</button>
+    <div name="1"></div>
+</div>
+
+<div>
+    <p>2) <b>CSS</b> describes the <b>style</b> or visual appearence of the elements.</p>
+    
+    <pre>
+&lt;style&gt;
+    h1 {
+        color: red;
+        font-size: 300%;
+        margin-left: 100px;
+    }
+&lt;/style&gt;
+</pre>
+    <button name="2" type="button">Run</button>
+    <div name="2"></div>
+</div>
+
+<div>
+    <p>3) <b>Code</b> written in <b>Javascript</b> is used to add dynamic behavior to web pages.</p>
+    <pre>console.log('Press F12 to open the developer tools and see the console.')</pre>
+    <button name="3" type="button">Run</button>
+    <div name="3"></div>
+</div>
+
+<div>
+    <p>4) <b>Selectors</b> are used in CSS and Javascript to select HTML elements.</p>
+        <pre>
+&lt;form name="login"&gt;
+    &lt;label name="email"&gt;Email&lt;/label&gt;
+    &lt;input type="text" name="email"&gt;
+    &lt;button&gt;Login&lt;/button&gt;
+    &lt;p class="error"&gt;&lt;/p&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+    form[name="login"] {
+        border: 1px solid grey;
+        width: 50%;
+        border-radius: 1em;
+        padding: 0.5em;
+        box-shadow: rgb(221, 221, 221) 0px 0px 3px 3px;
+        margin: 1em;
+        background-color: white;
+    }
+
+    .error {
+        color: red;
+        display: none;
+    }
+&lt;/style&gt;
+
+&lt;script&gt;
+    var loginForm = document.querySelector('form[name="login"]')
+    var errorElement = loginForm.querySelector('.error')
+    
+    // Wait 5 seconds (5000 milliseconds)
+    setTimeout(function() {
+        errorElement.textContent = "5 seconds have passed."
+        errorElement.style.display = 'block'
+    }, 5000)
+&lt;/script&gt;
+</pre>
+    <button name="4" type="button">Run</button>
+    <div name="4"></div>
+</div>
+
+
+<div>
+    <p>5) <b>Event handlers</b> allow code to run when a thing happens in the browser.</p>
+    <pre>
+loginForm.addEventListener('submit', function(event) {
+    event.preventDefault()
+
+    var email = loginForm.querySelector('input[name="email"]').value
+    login(email)
+
+    return false
+})
+
+function login(email) {
+    console.log('Email:', email)
+}
+</pre>
+    <button name="5" type="button">Run</button>
+    <div name="5"></div>
+</div>
+
+<div>
+    <p>6) <b>Requests</b> are messages passed from the <b>client</b> to a <b>server</b>.</p>
+    <pre>
+function login(email) {
+    fetch('/content/learn-web-dev/login?email=' + encodeURIComponent(email), {
+        method: 'POST',
+    })
+    .then(function(response) {
+        if(response.ok) {
+            console.log('You are logged in!')
+        }
+
+        else {
+            console.log('Error!')
+            loginForm.querySelector('.error').textContent = 'You must enter a valid email address.'
+        }
+    })
+}
+
+function displayLoggedInUser() {
+    fetch('/content/learn-web-dev/user')
+    .then(function(response) {
+        if(response.ok) {
+            return response.text()
+        }
+    })
+    .then(function(name) {
+        var nameElement = document.querySelector('[name="name"]')
+        name.textContent = 'You are logged in as ' + name
+    })
+}
+</pre>
+    <button name="6" type="button">Run</button>
+    <div name="6"></div>
+</div>
+
+
+<div>
+    <p>7) Servers read data from and write data to <b>databases</b>.</p>
+    <pre>
+// This runs on the server.
+
+function handleRequest(request, response) {
+    if(request.method == 'POST' && request.url.startsWith('/content/learn-web-dev/chat?')) {
+        var message = parseQueryString(request).message
+        
+        var data = {
+            message: message,
+            time: Date.now(),
+        }
+
+        var writeQuery = db.table('messages').insert(data)
+
+        writeQuery.run(dbConnection, function(error) {
+            if(!error) {
+                response.writeHead(201)
+                response.end()
+            }
+
+            else {
+                response.writeHead(500)
+                response.end()
+            }
+        })
+        
+    }
+    
+    else if(request.method == 'GET' && request.url == '/content/learn-web-dev/chat') {
+        var readQuery = db.table('messages').readAll().sortedBy('time')
+        
+        readQuery.run(dbConnection, function(error, results) {
+            if(!error) {
+                response.writeHead(200, { 'Content-Type': 'application/json' })
+                response.end(JSON.stringify(results))
+            }
+
+            else {
+                response.writeHead(500)
+                response.end()
+            }
+        })
+    }
+
+    else {
+        response.writeHead(404)
+        response.end()
+    }
+}
+
+var dbConnection = db.connect(function() {
+    http.createServer(handleRequest).listen(80)
+})
+</pre>
+    <button name="7" type="button">Run</button>
+    <div name="7"></div>
+</div>
+
+<div>
+    <h2>Great job!</h2>
+
+    <p>These are the basic building blocks of web development. The key to learning web development is practice. There are patterns and details, but the core is right here.</p>
+
+    <p>If you want some help, email <a href="mailto:contact@aurifexlabs.com">contact@aurifexlabs.com</a> for information about online tutoring.</p>
+
+</div>
+
+
+
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    document.querySelector('button[name="1"]').addEventListener('click', function() {
+        document.querySelector('div[name="1"]').innerHTML = '<h1>Introduction</h1><p>h1-h7 are header tags. p is for paragraph. a is for <a href="https://aurifexlabs.com">link</a>. img is for image.</p>'
+    })
+    
+    document.querySelector('button[name="2"]').addEventListener('click', function() {
+        var div2 = document.querySelector('div[name="2"]')
+        div2.innerHTML = '<h1>Introduction</h1>'
+        var h1 = div2.querySelector('h1')
+        h1.style.color = 'red'
+        h1.style.fontSize = '300%'
+        h1.style.marginLeft = '100px'
+    })
+
+    document.querySelector('button[name="3"]').addEventListener('click', function() {
+        console.log('Press F12 to open the developer tools and see the console.')
+    })
+
+    document.querySelector('button[name="4"]').addEventListener('click', function() {
+        var output = document.querySelector('div[name="4"]')
+        output.innerHTML = '<form><label name="email">Email</label><input type="text" name="email"><button>Login</button><p class="error"></p></form>'
+        var form = output.querySelector('form')
+        form.style.border = '1px solid grey'
+        form.style.width = '50%'
+        form.style.borderRadius = '1em'
+        form.style.padding = '0.5em'
+        form.style.boxShadow = '0px 0px 3px 3px #ddd'
+        form.style.margin = '1em'
+        form.style.backgroundColor = 'white';
+
+        var errorElement = form.querySelector('.error')
+        errorElement.style.color = 'red'
+
+        // Wait 5 seconds (5000 milliseconds)
+        setTimeout(function() {
+            errorElement.textContent = '5 seconds have passed.'
+            errorElement.style.display = 'block'
+        }, 5000)
+    })
+
+
+    document.querySelector('button[name="5"]').addEventListener('click', function() {
+        var output = document.querySelector('div[name="5"]')
+        output.innerHTML = '<form><label name="email">Email</label><input type="text" name="email"><button>Login</button><p class="error"></p></form>'
+        var form = output.querySelector('form')
+        form.style.border = '1px solid grey'
+        form.style.width = '50%'
+        form.style.borderRadius = '1em'
+        form.style.padding = '0.5em'
+        form.style.boxShadow = '0px 0px 3px 3px #ddd'
+        form.style.margin = '1em'
+        form.style.backgroundColor = 'white';
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault()
+
+            var email = form.querySelector('input[name="email"]').value
+            login(email)
+
+            return false
+        })
+
+        function login(email) {
+            console.log('Email:', email)
+        }
+    })
+
+    document.querySelector('button[name="6"]').addEventListener('click', function() {
+        var output = document.querySelector('div[name="6"]')
+        output.innerHTML = '<form><label name="email">Email</label><input type="text" name="email"><button>Login</button><p>Name: <span name="name"></span></p><p class="error"></p></form>'
+        var form = output.querySelector('form')
+        form.style.border = '1px solid grey'
+        form.style.width = '50%'
+        form.style.borderRadius = '1em'
+        form.style.padding = '0.5em'
+        form.style.boxShadow = '0px 0px 3px 3px #ddd'
+        form.style.margin = '1em'
+        form.style.backgroundColor = 'white';
+
+        var errorElement = form.querySelector('.error')
+        errorElement.style.color = 'red'
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault()
+
+            var email = form.querySelector('input[name="email"]').value
+            login(email)
+
+            return false
+        })
+
+        function login(email) {
+            if(email && email.includes('@')) {
+                console.log('You are logged in!')
+                var nameElement = form.querySelector('[name="name"]')
+                nameElement.textContent = email.split('@')[0]
+                form.querySelector('.error').style.display = 'none'
+            }
+            
+            else {
+                console.log('Error!')
+                form.querySelector('.error').textContent = 'You must enter a valid email address.'
+            }
+        }
+    })
+
+    document.querySelector('button[name="7"]').addEventListener('click', function() {
+        var output = document.querySelector('div[name="7"]')
+        output.innerHTML = '<form><label name="email">Message</label><input type="text" name="message"><button>Send</button></form>'
+        var form = output.querySelector('form')
+        form.style.border = '1px solid grey'
+        form.style.width = '50%'
+        form.style.borderRadius = '1em'
+        form.style.padding = '0.5em'
+        form.style.boxShadow = '0px 0px 3px 3px #ddd'
+        form.style.margin = '1em'
+        form.style.backgroundColor = 'white';
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault()
+
+            
+            var message = form.querySelector('input[name="message"]').value
+            form.querySelector('input[name="message"]').value = ''
+
+            var p = document.createElement('p')
+            p.textContent = (new Date()).toLocaleString() + ': ' + message
+            form.appendChild(p)
+
+            return false
+        })
+    })
+
+</script>
+    
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function unAuthed() {
+        // location.href = '/'
+        document.querySelector('header [name="email"]').textContent = 'You are not logged in.'
+    }
+
+    function loadPage(user) {
+        document.querySelector('header [name="email"]').textContent = user.email
+    }
+</script>
+
+</body>
+</html>
+        

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+    </head>
+
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        button {
+            font-family: sans-serif;
+        }
+
+        form {
+            padding: 1em;
+            border: 1px solid #333; 
+        }
+    </style>
+    
+    <body>
+        <h1>Text Rasterizer</h1>
+
+        <form name="font">
+            <label name="url">Font URL</label>
+            <input type="text" name="url">
+            <button type="submit">Generate font</button>
+        </form>
+        <p>
+            Some example text. A reasonable amount. Not too much...
+        </p>
+
+        <canvas width=180 height=160></canvas>
+    </body>
+    
+    <script>
+        window.addEventListener('load', function() {
+            var fontForm = document.querySelector('form[name="font"]')
+
+            fontForm.addEventListener('submit', function(event) {
+                event.preventDefault()
+
+                var url = fontForm.querySelector('input[name="url"]').value
+                console.log('font url:', url)
+
+                var font = new FontFace('Dynamic', 'url(' + url + ')')
+                font.load()
+                .then(function(loadedFont) {
+                    console.log(loadedFont)
+                    document.fonts.add(loadedFont)
+                    document.body.style.fontFamily = '"Dynamic"'
+                    drawAlphabet()
+                })
+                .catch(function(error) {
+                    console.log('error in load font', error)
+                })
+
+                return false
+            })
+
+            drawAlphabet()
+        })
+
+        function drawAlphabet() {
+            var canvas = document.querySelector('canvas')
+            var canvasContext = canvas.getContext('2d')
+            
+            canvasContext.fillStyle = '#222'
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height)
+            
+            canvasContext.fillStyle = '#777'
+            for(var i = 0; i < 32; i++) {
+                canvasContext.beginPath()
+                canvasContext.moveTo(0, i * 5)
+                canvasContext.lineTo(canvas.width, i * 5)
+                canvasContext.stroke()   
+            }
+
+            canvasContext.fillStyle = '#ccc'
+            canvasContext.font = '140px "Dynamic"'
+            canvasContext.fillText('p', 20, 120)
+        }
+
+    </script>
+</html>

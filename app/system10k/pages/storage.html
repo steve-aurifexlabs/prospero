@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Storage | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Storage</h1>
+</header>
+
+<div style="display: none;">
+    <h2 style="display: none;">/</h2>
+    <p>
+        <button style="display: none;">Download</button>
+        <button style="display: none;">Rename</button>
+        <button style="display: none;">Move</button>
+        <button style="display: none;">Delete</button>
+    </p>
+</div>
+
+<div style="display: none;">
+    <h2>Folders</h2>
+    <p><a href="/storage/src/">src/</a></p>
+</div>
+
+<div name="files" style="display: none;">
+    <h2>Files</h2>
+    <p name="message">Loading...</p>
+</div>
+
+<form name="new-file" style="display: none;">
+    <h2>New File</h2>
+    <label name="filename">Filename</label>
+    <input type="text" name="filename" maxlength="255">
+    <button>Create new file</button>
+    <p name="message"></p>
+</form>
+
+<form style="display: none;">
+    <h2>Upload File</h2>
+    <button>Upload file</button>
+</form>
+
+<form style="display: none;">
+    <h2>New Folder</h2>
+    <label name="filename">Folder name</label>
+    <input type="text" name="folder-name">
+    <button>Create new folder</button>
+</form>
+
+<form style="display: none;">
+    <h2>Upload Folder</h2>
+    <p>Upload a zip file.</p>
+    <button>Upload folder</button>
+</form>
+    
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                location.href = '/'
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function loadPage(user) {
+        var newFileForm = document.querySelector('form[name="new-file"]')
+        
+        newFileForm.addEventListener('submit', function(event) {
+            event.preventDefault()
+
+            var message = newFileForm.querySelector('[name="message"]')
+
+            var filename = newFileForm.querySelector('input[name="filename"]').value
+            if(!filename) {
+                message.textContent = 'Please enter filename.'
+                return
+            }
+
+            if(filename.includes('/')) {
+                message.textContent = 'Filenames cannot contain "/"'
+                return
+            }
+
+            if(filename.includes('\0')) {
+                message.textContent = 'Filenames cannot contain the null character.'
+                return
+            }
+
+            if(filename == '..') {
+                message.textContent = 'Filename cannot be ".."'
+                return
+            }
+
+            if(filename.length > 255) {
+                message.textContent = 'Filename too long. Max 255 characters.'
+                return
+            }
+
+            message.textContent = 'Sending request...'
+            fetch('/api/newFile?filename=' + encodeURIComponent(filename), {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.sessionId,
+                },
+            }).then(function(response) {
+                if(response.ok) {
+                    console.log('File created:', filename)
+                    location.reload() 
+                }
+
+                else if(response.status == 401) {
+                    location.href = '/'
+                }
+
+                else {
+                    message.textContent = "There was an error. Please try again."
+                }
+            })
+
+            return false
+        })
+
+        var fileListMessage = document.querySelector('div[name="files"] p[name="message"]')
+        fetch('/api/files?path=' + encodeURIComponent('/'), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function(response) {
+            if(response.ok) {
+                return response.json()
+            }
+
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+
+            else {
+                fileListMessage.textContent = 'Error loading file list.'
+            }
+        }).then(function(files) {
+            if(!files) {
+                fileListMessage.textContent = 'None.'
+            }
+            
+            else {
+                fileListMessage.textContent = ''
+
+                var fileList = document.querySelector('div[name="files"]')
+                files.forEach(function(filename) {
+                    var link = document.createElement('a')
+                    link.setAttribute('href', '/files/' + encodeURIComponent(filename))
+                    link.textContent = filename
+                    
+                    var p = document.createElement('p')
+                    p.appendChild(link)
+
+                    fileList.appendChild(p)
+                })
+            }
+        })
+
+        document.querySelector('header [name="email"]').textContent = user.email
+        document.querySelector('div[name="files"]').style.display = 'block'
+        document.querySelector('form[name="new-file"]').style.display = 'block'
+    }
+</script>
+
+</body>
+</html>
+        

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Video Chat Caller | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+
+video[name="remote"] {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+}
+
+video[name="local"] {
+    width: 120px;
+    height: 90px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 0 4px black;
+}
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Video Chat - Caller</h1>
+</header>
+
+<video name="remote" autoplay></video>
+<video name="local" autoplay muted></video>
+    
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function unAuthed() {
+        location.href = '/'
+    }
+
+    function loadPage(user) {
+        document.querySelector('header [name="email"]').textContent = user.email
+        startCall()
+    }
+
+    var peerConnection
+    var iceCandidates = []
+
+    function startCall() {        
+        console.log('caller: startCall')
+
+        setInterval(function() {
+            receive(function(data) {
+                if(data.answer) {
+                    var sessionDescription = new RTCSessionDescription(data.answer)
+                    peerConnection.setRemoteDescription(sessionDescription)
+                }
+                
+                if(data.icecallee) {
+                    data.icecallee.forEach(function(iceMessage) {
+                        iceCandidates.push(iceMessage)
+                    })
+                }
+            })
+
+            if(peerConnection && peerConnection.remoteDescription) {
+                iceCandidates.forEach(function(iceMessage) {
+                    if(iceMessage) {
+                        var candidate = new RTCIceCandidate(iceMessage)
+                        peerConnection.addIceCandidate(candidate)
+                    }
+                })
+                iceCandidates = []
+            }
+        }, 2000)
+
+        startCall2()
+    }
+
+    function startCall2() {
+        peerConnection = new RTCPeerConnection({
+            iceServers: [{
+                // urls: [ localStorage.stun || "stun:stun.l.google.com:19302" ],
+                // urls: [ "stun:stun.stunprotocol.org" ],
+                urls: ["stun:aurifexlabs.com:3478", 'turn:aurifexlabs.com:3478' ],
+                // urls: ['turn:aurifexlabs.com:3478' ],
+                username: 'username2',
+                credential: 'oGtata8EdBtFhQUc',
+            }]
+        })
+                
+        peerConnection.onicecandidate = function(event) {
+            if(event.candidate) {
+                send('icecaller', event.candidate)
+            }
+        }
+
+        peerConnection.ontrack = function(event) {
+            var remoteVideo = document.querySelector('video[name="remote"]')
+            remoteVideo.srcObject = event.streams[0]
+        }
+
+        peerConnection.onnegotiationneeded = function(event) {
+            peerConnection.createOffer()
+            .then(function(offer) {
+                return peerConnection.setLocalDescription(offer)
+            })
+            .then(function() {
+                send('offer', peerConnection.localDescription)
+            })
+        }
+
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        }).then(function(localStream) {
+            var localVideo = document.querySelector('video[name="local"]')
+        
+            localVideo.srcObject = localStream
+
+            localStream.getTracks().forEach(function(track) {
+                peerConnection.addTrack(track, localStream)
+            })
+        })
+    }
+
+    function send(messageName, data) {
+        fetch('/api/webrtc?' + messageName + '=' + encodeURIComponent(JSON.stringify(data)), {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function(response) {
+            if(response.ok) {
+                console.log(messageName + ' sent to server.')
+            }
+
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+
+            else {
+                console.log('There was an error. Please try again.')
+            }
+        })
+    }
+
+    function receive(done) {
+        fetch('/api/webrtc/caller', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function(response) {
+            if(response.ok) {
+                console.log('receive from server')
+                return response.json()
+            }
+
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+
+            else {
+                console.log('There was an error. Please try again.')
+            }
+        })
+        .then(function(data) {
+            done(data)
+        })
+    }
+</script>
+
+</body>
+</html>
+        

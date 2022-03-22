@@ -1,0 +1,85 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Sparrow</title>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Oxygen+Mono&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="sparrow.css"></style>
+        <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/AAAAuwCVAAAA/wAingAAInnKAACz/wAi//8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQEAAAUFAgIEBAQEBAMDAwEBAAAFBQICBAQEBAQDAwMBAQAABQUCAgQEBAQEAwMDAQEAAAUFAgIEBAQEBAMDAwEBAAAFBQICBAQEBAQDAwMBAQAABQUCAgQEBAQEAwMDAQEAAAUFAgIEBAQEBAMDAwEBAAAFBQICBAQEBAQDAwMBAQAABQUCAgQEBAQEAwMDAQEAAAUFAgIEBAQEBAMDAwEBAAAFBQICBAQEBAQDAwMBAQAABQUCAgQEBAQEAwMDBwcHBwcHBwcHBwcGBgYGBgcHBwcHBwcHBwcHBgYGBgYHBwcHBwcHBwcHBwYGBgYGBwcHBwcHBwcHBwcGBgYGBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" />
+    </head>
+    <body>
+        <span id="clock" style="float: right; font-family: 'Oxygen Mono', monospace;"></span>
+        <div>
+
+            <button id="share-camera-mic">Enable<br> 🎥Camera + 🎙️Mic</button>
+            <!-- <button id="share-screen">Share screen</button> -->
+            
+            <span class="message">
+                Connecting...
+            </span>
+            <br>
+        
+            <!-- <input type="text"> -->
+            <!-- <button>Message</button> -->
+            <!-- <button>Link</button> -->
+        
+            <div id="a" class="team" style="margin-left: 20px;">
+                <h2>a</h2>
+                <canvas class="video" width="30" height="500"></canvas>
+            </div>
+            <div id="b" class="team">
+                <h2>b</h2>
+                <canvas class="video" width="30" height="500"></canvas>
+            </div>
+            <div id="c" class="team">
+                <h2>c</h2>
+                <canvas class="video" width="30" height="500"></canvas>
+            </div>
+            <div id="d" class="team">
+                <h2>d</h2>
+                <canvas class="video" width="30" height="500"></canvas>
+            </div>
+            <div id="e" class="team">
+                <h2>Code</h2>
+                <canvas class="video" width="1000" height="525"></canvas>
+            </div>
+
+            <div id="f" class="team">
+                <h2>then...</h2>
+                <div>
+                    <p>
+                        <span style="cursor: pointer;">Preview</span>
+                        <span style="cursor: pointer;">Build</span>
+                        <span style="cursor: pointer;">Run</span>
+                        <span style="cursor: pointer;">Mark</span>
+                    </p>
+
+                </div>
+                <p><a href="end-session">End Session</a></p>
+                <!-- <canvas class="video" width="200" height="30"></canvas> -->
+            </div>
+
+        <footer>
+            <a href="/terms-of-service">Terms</a>
+            <a href="/privacy-policy">Privacy</a>
+            <a href="mailto:contact@aurifexlabs.com">Contact</a>
+            ©2020 Aurifex Labs LLC
+        </footer>
+
+        <video id="raw-camera" style="display: none;"></video>
+        <video id="raw-screen-share" style="display: none;"></video>
+        <canvas id="scratch-screen-share" width="1600" height="900" style="display: none;"></video>
+
+        <script src="sparrow-client.js"></script>
+        <script>
+            sparrow(location.search.split('=')[1], {
+                a: document.querySelector('#a canvas.video'),
+                b: document.querySelector('#b canvas.video'),
+                c: document.querySelector('#c canvas.video'),
+                d: document.querySelector('#d canvas.video'),
+            })
+        </script>
+    </body>
+</html>

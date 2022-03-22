@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Programming in 10 minutes | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Programming in 10 minutes</h1>
+</header>
+    
+<div>
+    <p>1) <b>Functions</b> do things. You <b>call</b> functions.</p>
+    
+    <pre>printHelloWorld()</pre>
+    <button name="1" type="button">Run</button>
+    <p><span name="1"></span></p>
+</div>
+
+<div>
+    <p>2) Functions can take <b>arguments</b>, and <b>return values</b>.</p>
+    
+    <pre>
+print("This is an argument.")
+    
+print(random())
+    </pre>
+    <button name="2" type="button">Run</button>
+    <p><span name="2"></span></p>
+</div>
+
+<div>
+    <p>3) You can <b>define</b> functions that do new things.</p>
+    
+    <pre>
+function randomInt(min, max) {  
+    return floor(random() * (1 + max - min) + min)
+}
+
+print(randomInt(3, 9))
+    </pre>
+    <button name="3" type="button">Run</button>
+    <p><span name="3"></span></p>
+</div>
+
+<div>
+    <p>4) Most <b>operators</b> are just functions with special symbols.</p>
+    
+    <pre>
+print(7 + 5)
+print(add(7, 5))
+    </pre>
+    <button name="4" type="button">Run</button>
+    <p><span name="4"></span></p>
+</div>
+
+
+<div>
+    <p>5) You can <b>assign</b> a value to a <b>variable</b>.</p>
+    
+    <pre>
+var a = 6
+print(3 * a)
+    </pre>
+    <button name="5" type="button">Run</button>
+    <p><span name="5"></span></p>
+</div>
+
+<div>
+    <p>6) <b>Conditionals</b> allow some things to happen and not other things.</p>
+    
+    <pre>
+if(random() > 0.5) {
+    print('Heads')
+}
+
+else {
+    print('Tails')
+}
+    </pre>
+    <button name="6" type="button">Run</button>
+    <p><span name="6"></span></p>
+</div>
+
+<div>
+    <p>7) <b>Loops</b> make things happen more than once.</p>
+    
+    <pre>
+for(var i = 0; i < 3; i++) {
+    print("loop")
+}
+        
+for(var i = 0; i < 5; i++) {
+    print(i)
+}
+
+    </pre>
+    <button name="7" type="button">Run</button>
+    <p><span name="7"></span></p>
+</div>
+
+<div>
+    <p>8) Values have <b>types</b> like number, string, and boolean. <b>Comments</b> don't get run.</p>
+    
+    <pre>
+// n is a number. This is a comment.
+var n = 10
+
+// name is a string.
+var name = "Asha"
+
+// done is a boolean. Booleans can be true or false.
+var done = true
+
+if(done) {
+    print(name + " is learning to program in " + n.toString() + " minutes." )
+}
+    </pre>
+    <button name="8" type="button">Run</button>
+    <p><span name="8"></span></p>
+</div>
+
+<div>
+    <p>9) <b>Arrays</b> contain multiple values and are ordered. You can <b>lookup</b> and <b>assign</b> an item in an array by its <b>index</b>. You can also loop over an array.</p>
+    
+    <pre>
+var names = ['Steve', 'Miranda', 'Jen', 'Lincoln']
+
+print(names[0])
+
+names[2] = 'Jenn'
+
+names.forEach(function(name) {
+    print(name)
+})
+    </pre>
+    <button name="9" type="button">Run</button>
+    <p><span name="9"></span></p>
+</div>
+
+
+<div>
+    <p>10) <b>Objects</b> can be used to store structured data. Values in an object are looked up and assigned by their <b>key</b>.</p>
+    
+    <pre>
+var person = {
+    name: 'Bonnie',
+    email: 'bonnie@aurifexlabs.com',
+    logins: 13,
+    isAuthenticated: true,
+}
+
+if(person.isAuthenticated) {
+    print("You are logged in as: " + person.name + " (" + person.email + ")."
+    person.logins += 1
+}
+
+else {
+    print("Please log in.")
+}
+    </pre>
+    <button name="10" type="button">Run</button>
+    <p><span name="10"></span></p>
+</div>
+
+<div>
+    <h2>Great job!</h2>
+
+    <p>These are the basic building blocks of programming. The key to learning programming is practice. There are patterns and details, but the core is right here.</p>
+
+    <p>If you want some help, email <a href="mailto:contact@aurifexlabs.com">contact@aurifexlabs.com</a> for information about online tutoring.</p>
+
+</div>
+
+
+
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    document.querySelector('button[name="1"]').addEventListener('click', function() {
+        document.querySelector('span[name="1"]').textContent = 'Hello, world!'
+    })
+
+    document.querySelector('button[name="2"]').addEventListener('click', function() {
+        document.querySelector('span[name="2"]').textContent = 'This is an argument. ' + Math.random().toString()
+    })
+
+    document.querySelector('button[name="3"]').addEventListener('click', function() {
+        document.querySelector('span[name="3"]').textContent = Math.floor(Math.random() * (1 + 9 - 3) + 3).toString()
+    })
+
+    document.querySelector('button[name="4"]').addEventListener('click', function() {
+        document.querySelector('span[name="4"]').textContent = '12 12'
+    })
+
+    document.querySelector('button[name="5"]').addEventListener('click', function() {
+        document.querySelector('span[name="5"]').textContent = '18'
+    })
+
+    document.querySelector('button[name="6"]').addEventListener('click', function() {
+        if(Math.random() > 0.5) {
+            document.querySelector('span[name="6"]').textContent = 'Heads'
+        }
+        
+        else {
+            document.querySelector('span[name="6"]').textContent = 'Tails'
+        }
+    })
+
+    document.querySelector('button[name="7"]').addEventListener('click', function() {
+        document.querySelector('span[name="7"]').textContent = 'loop loop loop 0 1 2 3 4'
+    })
+
+    document.querySelector('button[name="8"]').addEventListener('click', function() {
+        document.querySelector('span[name="8"]').textContent = 'Asha is learning to program in 10 minutes.'
+    })
+
+    document.querySelector('button[name="9"]').addEventListener('click', function() {
+        document.querySelector('span[name="9"]').textContent = 'Steve Steve Miranda Jenn Lincoln'
+    })
+
+    document.querySelector('button[name="10"]').addEventListener('click', function() {
+        document.querySelector('span[name="10"]').textContent = 'You are logged in as: Bonnie (bonnie@aurifexlabs.com).'
+    })
+</script>
+    
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function unAuthed() {
+        // location.href = '/'
+        document.querySelector('header [name="email"]').textContent = 'You are not logged in.'
+    }
+
+    function loadPage(user) {
+
+        document.querySelector('header [name="email"]').textContent = user.email
+    }
+</script>
+
+</body>
+</html>
+        

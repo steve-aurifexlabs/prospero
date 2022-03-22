@@ -1,0 +1,123 @@
+server {
+    return 301 https://prosperodev.live;
+    server_name www.prosperodev.live;
+    listen 80;
+
+    #listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/prosperodev.live/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/prosperodev.live/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+    return 301 https://prosperodev.live;
+    server_name prosperodev.live;
+    listen 80;
+
+    #listen 443 ssl; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/prosperodev.live/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/prosperodev.live/privkey.pem; # managed by Certbot
+    #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+
+server {
+  location / {
+    proxy_pass http://localhost:8080;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-Proto https;
+    proxy_set_header  X-Forwarded-For $remote_addr;
+    proxy_set_header  X-Forwarded-Host $remote_addr;
+  }
+
+  server_name prosperodev.live;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/prosperodev.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/prosperodev.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+  server_name gateway.prosperodev.live;
+
+  location / {
+    proxy_pass http://localhost:8081;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_buffering off;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-Proto https;
+    proxy_set_header  X-Forwarded-For $remote_addr;
+    proxy_set_header  X-Forwarded-Host $remote_addr;
+
+  }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/gateway.prosperodev.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/gateway.prosperodev.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+  server_name *.app.prosperodev.live;
+
+  location / {
+    proxy_pass http://localhost:8082;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_buffering off;
+    proxy_cache_bypass $http_upgrade;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-Proto https;
+    proxy_set_header  X-Forwarded-For $remote_addr;
+    proxy_set_header  X-Forwarded-Host $remote_addr;
+
+ }
+
+  client_max_body_size 2G;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app.prosperodev.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app.prosperodev.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+
+server {
+  server_name *.run.prosperodev.live;
+
+  location / {
+    proxy_pass http://localhost:8082;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host;
+    proxy_cache_bypass $http_upgrade;
+    proxy_buffering off;
+    proxy_set_header  X-Real-IP $remote_addr;
+    proxy_set_header  X-Forwarded-Proto https;
+    proxy_set_header  X-Forwarded-For $remote_addr;
+    proxy_set_header  X-Forwarded-Host $remote_addr;
+  }
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/run.prosperodev.live/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/run.prosperodev.live/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}

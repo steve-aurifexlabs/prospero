@@ -1,0 +1,23 @@
+{
+  "name": "system10k",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^3.0.0",
+    "isomorphic-ws": "^4.0.1",
+    "pg": "^8.5.1",
+    "postmark": "^2.7.1",
+    "stripe": "^8.89.0",
+    "ws": "^7.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED"
+}

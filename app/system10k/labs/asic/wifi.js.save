@@ -1,0 +1,84 @@
+var module = {
+	ports: ['antenna{positive, negative}','dataIn[n]', 'dataOut[n]', 'writeEnable', 'error', 'control{in, out, clock, select}'],
+	components: {
+		transceiverSwitch: './rf/wifi_switch_24g.js',
+		receiverFrontend: 'https://lib.aurifexlabs.com/asic/rf/low_moise_amplifier_24g.js',
+		transmitterFrontend: 'https://lib.aurifexlabs.com/asic/rf/power_amplifier_24g.js',
+		receiverMixer: 'https://lib.aurifexlabs.com/asic/rf/mixer_down_24g.js',
+		transmitterMixer: 'https://lib.aurifexlabs.com/asic/rf/mixer_up_24g.js',
+
+		adc: 'https://lib.aurifexlabs.com/asic/mixed/adc_20Mhz_12b.js',
+		dac: 'https://lib.aurifexlabs.com/asic/mixed/dac_20Mhz_12b.js',
+		ifft: 'https://lib.aurifexlabs.com/asic/digital/ifft_128_40Mhz_500ns_16b.js',
+		fft: 'https://lib.aurifexlabs.com/asic/digital/fft_128_40Mhz_500ns_16b.js',
+		symbolDecoder: 'https://lib.aurifexlabs.com/asic/digital/64qam_decoder.js',
+		symbolEncoder: 'https://lib.aurifexlabs.com/asic/digital/64qam_encoder.js',
+
+		transceiverLogic: './wifi_tranceiver_logic.js',
+		csmaStateMachine: './fsm/csma.js',
+		receiveStateMachine: './fsm/receive.js',
+		transmitStateMachine: './fsm/transmit.js',
+		receiveBuffer: 'https://lib.aurifexlabs.com/asic/digital/queue_128_8b.js',
+		transmitBuffer: 'https://lib.aurifexlabs.com/asic/digital/queue_128_8b.js',
+
+		controlInterfaceModule: './wifi_control.js',
+		bigProcessor: 'https://lib.aurifexlabs.com/asic/cpu/aurifex_big_16b.js',
+		littleProcessor: 'https://lib.aurifexlabs.com/asic/cpu/aurifex_little_16b.js',
+	},
+	connections: [
+		['ports.antenna', 'transceiverSwitch.antenna'],
+		['tranceiverSwitch.out', 'receiverFrontend.in'],
+		['tranceiverSwitch.in', 'transmitterFrontend.out'],
+		['receiverFrontend.out', 'receiverMixer.in'],
+		['transmitterFrontend.in', 'transmitterMixer.out'],
+
+		['receiverMixer.out', 'adc.in'],
+		['trasmitterMixer.in', 'dac.out'],
+		['adc.out', 'ifft.in'],
+		['dac.in', 'fft.out'],
+		['ifft.out', 'symbolDecoder.in'],
+		['fft.in', 'symbolEncoder.out'],
+
+		['symbolDecoder.out', 'transceiverLogic.symbolIn'],
+		['symbolEncoder.in', 'transceiverLogic.symbolOut'],
+		['csmaStateMachine.collision', 'transceiverLogic.collision'],
+		['receiveStateMachine.receive', 'transceiverLogic.receive'],
+		['transmitStateMachine.transmit', 'transceiverLogic.transmit'],
+		['tranceiverLogic.dataOut', 'receiveBuffer.dataIn'],
+		['tranceiverLogic.writeEnable', 'receiveBuffer.writeEnable'],
+		['tranceiverLogic.dataIn', 'transmitBuffer.dataOut'],
+		['tranceiverLogic.readEnable', 'receiveBuffer.readEnable'],
+		['tranceiverLogic.controlBits', 'controlInterfaceModule.controlBits'],
+
+		// TODO - Connect control interface and cpus
+	],
+
+	dataRates: {
+		dataIn: 54e6,  // bps
+		dataOut: 54e6,
+	},
+	rfValues: {
+		channels: {
+			'2.4ghz_1': {
+				centerFrequency: 2.4e9,
+				bandwidth: 22.5e6,
+			},
+		},
+	},
+	portDirections: {
+		'antenna.positive': 'rf_inout',
+		'antenna.negative': 'rf_inout',
+		dataIn: 'in',
+		dataOut: 'out',
+		writeEnable: 'in',
+		error: 'out',
+		'control.in': 'in',
+		'control.out': 'out',
+		'control.clock': 'in',
+		'control.select': 'in',
+	},
+	software: {
+		bigProcessor: './c/wifi_big.c',
+		littleProcessor: './c/wifi_little.c',
+	},
+}

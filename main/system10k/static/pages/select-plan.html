@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' js.stripe.com; frame-src 'self' js.stripe.com;">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico">
+        <title>Select Plan | Prospero.Live</title>
+        <link href="/static/css/theme.css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <p class="big-title">Prospero.Live</p>
+            
+            <span>You are logged in as </span>
+            <br>
+            <b name="email">Loading...</b>
+            <br><br>
+            <span name="plan"></span>
+            <br><br>
+            <a href="/user/dashboard">Back to dashboard</a>
+
+        </header>
+        
+        <form name="select-plan">
+            <h2>Select Plan</h2>
+            
+            <label name="plan"><b>Plan</b></label>
+            <div>
+                <!--<label for="select-standard">Standard ($3/month or $36/year)</label>
+                <input type="radio" id="select-standard"
+                name="plan" value="standard">
+                
+                <br>
+                -->
+                <label for="select-pro">Pro ($15/month)</label>
+                <input type="radio" id="select-pro" name="plan" value="pro">
+                
+                <!-- <br>
+                
+                <label for="select-enterprise">Enterprise ($75/month or $900/year)</label>
+                <input type="radio" id="select-enterprise"
+                name="plan" value="enterprise"> -->
+            </div>
+            
+            <br>
+            
+            <label name="billing-period"><b>Billing period</b></label>
+            <div>
+                <label for="select-monthly">Monthly</label>
+                <input type="radio" id="select-monthly"
+                name="billing-period" value="monthly">
+                <!--
+                <br>
+                
+                <label for="select-annual">Annual</label>
+                <input type="radio" id="select-annual"
+                name="billing-period" value="annual">-->
+            </div>
+
+            <br>
+            <button type="submit">Select Plan</button>
+            <p name="message"></p>
+        </form>
+        
+        <footer>
+            <p>
+                <a href="/">Home</a>
+                <a href="/terms-of-service" target="_blank">Terms of Service</a>
+                <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                <a href="/cookies-policy" target="_blank">Cookies Policy</a>
+                <a href="mailto:contact@prospero.live">Contact</a>
+                <span>Copyright 2020-2021 Aurifex Labs LLC</span>
+                <img src="/static/images/footer.jpg">
+            </p>
+        </footer>
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <script src="/static/javascript/select-plan.js"></script>
+    </body>
+</html>
+        

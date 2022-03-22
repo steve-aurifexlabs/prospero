@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>RTS Game | Aurifex Labs</title>
+</head>
+<body>
+
+<style>
+body {
+    padding: 0;
+    margin: 0;
+    font-family: monospace;
+    display: flex;
+}
+
+h1 {
+    font-size: 250%;
+    text-align: center;
+    margin-bottom: 0;
+}
+h2 {
+    text-decoration-line: underline;
+}
+h3 {
+    margin-bottom: 0;
+}
+p {
+    margin: 0;
+}
+
+a {
+    padding: 3px;
+}
+
+section.player {
+    border: 1px dashed darkgray;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 40%;
+    margin: 1%;
+    height: 100%;
+}
+
+section.neutral {
+    width: 15%;
+}
+
+.subtitle {
+    font-size: 100%;
+    text-align: center;
+    margin-top: 0;
+}
+
+.start {
+    font-size: 300%;
+    text-align: center;
+    margin: 1em;
+}
+
+.time {
+    font-size: 200%;
+}
+
+.stage {
+    font-size: 150%;
+}
+
+.resources {
+    font-size: 200%;
+}
+
+.strategy p {
+    margin: 10px 0;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.bases, .fleet {
+    width: 50%;
+}
+</style>
+
+<section class="neutral player">
+    <h1>RTS Game</h1>
+    <p class="subtitle">is a 1D text-based RTS.</p>
+    <p class="start"><a href="#">Start</a></p>
+    <p>time: <span class="time">t-9:20</span></p>
+    <p>stage: <span class="stage">pregame</span></p>
+    <h2>Map</h2>
+    <h3>Base | B-2</h3>
+    <p>pos: -100 | slots: 5</p>
+    <h3>Base | B-1</h3>
+    <p>pos: -70 | slots: 3</p>
+    <h3>Base | B0</h3>
+    <p>pos: 0 | slots: 4</p>
+    <h3>Base | B+1</h3>
+    <p>pos: 70 | slots: 3</p>
+    <h3>Base | B+2</h3>
+    <p>pos: 100 | slots: 5</p>
+    
+    <h2>Units</h2>
+    <h3>worker</h3>
+    <p>cost: 10</p>
+    <h3>drone</h3>
+    <p>cost: 15 | speed: 7</p>
+    <p>attack: 5 | bonus: none</p>
+    <h3>fighter</h3>
+    <p>cost: 50 | speed: 15</p>
+    <p>attack: 15 | bonus: DS+15</p>
+    <h3>destroyer</h3>
+    <p>cost: 50 | speed: 5</p>
+    <p>attack: 25 | bonus: none</p>
+    <h3>frigate</h3>
+    <p>cost: 70 | speed: 7</p>
+    <p>attack: 50 | bonus: none</p>
+    <h3>battleship</h3>
+    <p>cost: 150 | speed: 3</p>
+    <p>attack: 125 | bonus: none</p>
+    <h3>carrier</h3>
+    <p>cost: 125 | speed: 5</p>
+    <p>attack: 100 | bonus: BS+50</p>
+    <h3>sub</h3>
+    <p>cost: 125 | speed: 10</p>
+    <p>attack: 200 | bonus: none</p>
+    
+    <h2>Buildings</h2>
+    <h3>mine</h3>
+    <p>cost: 200 | builds: worker</p>
+    <h3>factory</h3>
+    <p>cost: 100 | builds: drone, fighter, torpedo</p>
+    <h3>shipyard</h3>
+    <p>cost: 150 | builds: destroyer, frigate, battleship, carrier</p>
+    <h3>techlab</h3>
+    <p>cost: 100</p>
+    <h3>subpen</h3>
+    <p>cost: 300 | builds: sub</p>
+    
+    <h2>Tech</h2>
+    <h3>solar</h3>
+    <p>cost: 100 | drone range</p>
+    <h3>weapons1</h3>
+    <p>cost: 150 | +10% attack</p>
+    <h3>engines</h3>
+    <p>cost: 200 | +10% speed</p>
+    <h3>weapons2</h3>
+    <p>cost: 250 | +10% attack</p>
+    <h3>nuke</h3>
+    <p>cost: 400 | allows torpedo</p>
+    <h3>weapons3</h3>
+    <p>cost: 400 | +10% attack</p>
+
+</section>
+<section class="X player">
+    <h1>Team: <span class="teamname">X</span></h1>
+    <p>resources: <span class="resources">200</span></p>
+    <p>queue: <span class="queue">*worker, *drone, solar, fighter, factory</span></p>
+    <p>
+        tech: <span class="tech">solar, fusion</span> |
+        researching: <span class="tech">armor</span>
+    </p>
+    <div class="strategy">
+        <h2>Strategy</h2>
+        <p>
+            econ:
+            <a href="#"><b>balanced</b></a>
+            <a href="#">fleet</a>
+            <a href="#">econ</a>
+            <a href="#">tech</a>
+        </p>
+        <p>
+            fleet:
+            <a href="#"><b>defend</b></a>
+            <a href="#">scout</a>
+            <a href="#">expand</a>
+            <a href="#">engage-enemy</a>
+            <a href="#">attack-bases</a>
+            <a href="#">attack-hq</a>
+        </p>
+        <p>
+            unit1:
+            <a href="#"><b>drone</b></a>
+            <a href="#">fighter</a>
+            <a href="#">destroyer</a>
+            (<a href="#">frigate</a>
+            <a href="#">battleship</a>
+            <a href="#">carrier</a>
+            <a href="#">sub</a>)
+        </p>
+        <p>
+            unit2:
+            <a href="#">drone</a>
+            <a href="#">fighter</a>
+            <a href="#"><b>destroyer</b></a>
+            (<a href="#">frigate</a>
+            <a href="#">battleship</a>
+            <a href="#">carrier</a>
+            <a href="#">sub</a>)
+        </p>
+        <p>
+            mix:
+            <a href="#">100/0</a>
+            <a href="#">90/10</a>
+            <a href="#"><b>80/20</b></a>
+            <a href="#">70/30</a>
+            <a href="#">60/40</a>
+            <a href="#">50/50</a>
+        </p>
+    </div>
+
+    <div class="flex-container">
+        <div class="fleet">
+            <h2>Fleet</h2>
+            <h3>drone | X.D.0</h3>
+            <p>pos: -100 | order: defend B-2</p>
+            <h3>drone | X.D.1</h3>
+            <p>pos: -100 | order: defend B-2</p>
+        </div>
+        <div class="bases">
+            <h2>Base | B-2</h2>
+            <h3>hq | X.HQ</h3>
+            <p>pos: -100</p>
+            <h3>mine | X.M.0</h3>
+            <p>pos: -100 | workers: 5</p>
+            <h3>factory | X.F.0</h3>
+            <p>pos: -100 | building: drone(12)</p>
+        </div>
+    </div>
+    <br>
+    <p>RTS game is in early development. Nothing works yet.</p>
+    <p>Copyright 2019 Aurifex Labs LLC</p>
+</section>
+</body>
+<script>
+
+function addTeamZ() {
+    var teamXSection = document.querySelector('.X')
+    var teamZSection = teamXSection.cloneNode(true)
+    teamZSection.classList.remove('X')
+    teamZSection.classList.add('Z')
+    teamZSection.querySelector('.teamname').textContent = 'Z'
+    teamXSection.insertAdjacentElement('afterend', teamZSection)
+}
+
+function getStage(game) {
+    var stage
+    
+    if (game.time > 9 * 60) {
+        stage = 'pregame'
+    } else if (game.time > 6 * 60) {
+        stage = 'earlygame'
+    } else if (game.time > 3 * 60) {
+        stage = 'midgame'
+    } else if (game.time > 0) {
+        stage = 'lategame'
+    } else {
+        stage = 'overtime'
+    }
+
+    return stage
+}
+
+function timeToString(time) {
+    var sign = (time > 0 ? '-' : '+')
+    var minutes = Math.floor(Math.abs(time / 60)) 
+    var seconds = Math.abs(time % 60) 
+    return 't' + sign + minutes + ':' + ('00' + seconds).slice(-2)
+}
+</script>
+
+<script>
+var game = Game()
+
+window.addEventListener('load', function () {
+    addTeamZ()
+
+    var startButton = document.querySelector('.start a')
+    startButton.addEventListener('click', function(event) {
+        event.preventDefault()
+
+        setInterval(function () {
+            step(game)
+        }, (1000 / localStorage.speed) || 1000)
+
+        startButton.parentElement.removeChild(startButton)
+
+        return false
+    })
+    
+})
+
+///////////////////////////////////////////////
+
+function Game() {
+    var game = {}
+
+    game.time = 9 * 60 + 20
+    game.stage = 'pregame'
+    
+    game.teams = {}
+    game.teams.you = Team('Y', -110)
+    game.teams.opp = Team('O', 110)
+
+    return game
+} 
+
+function Team(teamPrefix, startingLocation) {
+    var team = {}
+
+    team.units = [
+        Unit(teamPrefix + '.HQ.S', startingLocation),
+        Unit(teamPrefix + '.M.S', startingLocation),
+        Unit(teamPrefix + '.F.S', startingLocation),
+        Unit(teamPrefix + '.D.0', startingLocation),
+        Unit(teamPrefix + '.D.1', startingLocation),
+    ]
+}
+
+function Unit(id, location) {
+    var unit = {}
+
+    unit.id = id
+    unit.location = location
+
+    return unit
+}
+
+///////////////////////////////////////////////////////
+
+function step(game) {
+    if(game.time > -3 * 60) {
+        game.time -= 1
+    }
+    game.stage = getStage(game);
+
+    // stepAI(game)
+    update(game)
+    render(game)
+}
+
+function update(game) {
+    Object.keys(game.teams).forEach(function (teamName) {
+        var team = game.teams[teamName]
+
+        // simStrategy(game, team)
+        // simUnits(game, team)
+
+        // updateStrategy(game, team)
+        updateUnits(game, team)
+    })
+}
+
+function updateUnits(game, team) {
+
+}
+
+
+
+function render(game) {
+        document.querySelector('.time').textContent = timeToString(game.time)
+        document.querySelector('.stage').textContent = game.stage
+
+
+} 
+</script>
+</html>

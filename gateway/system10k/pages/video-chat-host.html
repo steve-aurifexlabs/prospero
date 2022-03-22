@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Video Chat Host | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<style>
+body {
+    padding: 0;
+    margin: 0;
+}
+
+video[name="remote"] {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0.5;
+}
+
+video[name="local"] {
+    width: 120px;
+    height: 90px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 0 4px black;
+    opacity: 0.5;
+}
+
+.fade-in {
+    animation-name: fadeIn;
+    animation-duration: 3s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn {
+    0% {opacity: 0.5;}
+    100% {opacity: 1;}
+}
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Video Chat - Host</h1>
+</header>
+
+<video name="remote" autoplay muted></video>
+<video name="local" autoplay></video>
+    
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function unAuthed() {
+        location.href = '/'
+    }
+
+    function loadPage(user) {
+        document.querySelector('header [name="email"]').textContent = user.email
+        startCall()
+    }
+
+    function startCall() {
+        console.log('host: startCall')
+
+        var peerConnection = new RTCPeerConnection({
+            iceServers: [{
+                username: "SvllUf4tcG-uxM-CxMDBYBfjLAPbiSFGRPnfAdp7CnPNJ69Q04hxb3vIiqYVwUZXAAAAAF3m6UZhdXJpZmV4bGFicw==",
+                urls: [ "stun:u3.xirsys.com"],
+                credential: "d5739d74-1620-11ea-981a-f676af1e4042",
+            }]
+        })
+
+        peerConnection.onicecandidate = function(event) {
+
+        }
+
+        peerConnection.ontrack = function(event) {
+
+        }
+
+        peerConnection.onnegotiationneeded = function(event) {
+            peerConnection.createOffer()
+            .then(function(offer) {
+                return peerConnection.setLocalDescription(offer)
+            })
+            .then(function() {
+                sendSDP(peerConnection.localDescription)
+            })
+        }
+
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        }).then(function(localStream) {
+            var localVideo = document.querySelector('video[name="local"]')
+        
+            localVideo.srcObject = localStream
+            localVideo.classList.add('fade-in')
+
+            localStream.getTracks().forEach(function(track) {
+                peerConnection.addTrack(track, localStream)
+            })
+        })
+    }
+
+    function sendSDP(sdp) {
+        fetch('/api/webrtc?sdp=' + encodeURIComponent(JSON.stringify(sdp)), {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function(response) {
+            if(response.ok) {
+                console.log('SDP sent to server.')
+            }
+
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+
+            else {
+                console.log('There was an error. Please try again.')
+            }
+        })
+    }
+    
+    var remoteVideo = document.querySelector('video[name="remote"]')
+</script>
+
+</body>
+</html>
+        

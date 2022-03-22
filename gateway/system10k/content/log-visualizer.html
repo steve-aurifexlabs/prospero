@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Hatchet | Aurifex Labs</title>
+</head>
+<body>
+
+<body>
+    <h1>Hatchet - Log Visualizer</h1>
+    
+    <h2>Example Regex</h2>
+    <pre>/\S+ HTTP/1.1" 2..</pre>
+    <br>
+
+    <hr>
+
+    <form>
+        <label name="log">Log</label>
+        <textarea name="log" rows=30 cols=200></textarea>
+
+        <br>
+
+        <label name="regex">RegEx</label>
+        <input name="regex" type="text">
+        
+        <button>Run</button>
+    </form>
+
+    <hr>
+    <input type="range" min="0" max="100">
+
+    <div class="output2"></div>
+    <div class="output3"></div>
+    <div class="output"></div>
+    
+    <p>Copyright 2019 Aurifex Labs LLC</p>
+
+    <script>
+
+        window.addEventListener('load', function() {
+            var outputElement2 = document.querySelector('.output2')
+            
+            var slider = document.querySelector('input[type="range"]')
+            slider.addEventListener('input', function() {
+                outputElement2.style.width = slider.value + '%'
+            })
+            
+            
+            var form = document.querySelector('form')
+            form.addEventListener('submit', function(event) {
+                event.preventDefault()
+
+                var logLines = form.querySelector('textarea[name="log"]').value.split('\n')
+                var regex = new RegExp(form.querySelector('input[name="regex"]').value)
+                visualize(logLines, regex)
+            
+                return false
+            })
+        })
+
+        function visualize(logLines, regex) {
+            var outputElement = document.querySelector('.output')
+            var outputElement2 = document.querySelector('.output2')
+            var outputElement3 = document.querySelector('.output3')
+            
+            outputElement.innerHTML = ''
+            outputElement2.innerHTML = ''
+            outputElement3.innerHTML = ''
+
+            var previousTimestamp
+            var firstTimestamp
+            logLines.forEach(function(line) {
+                var color = 'red'
+                if(regex.test(line)) {
+                    color = 'green'
+                }
+
+                var currentTimestamp = extractTime(line)
+                var gap
+
+                if(previousTimestamp !== undefined) {
+                    gap = currentTimestamp - previousTimestamp
+                } else {
+                    gap = 0
+                    firstTimestamp = currentTimestamp
+                }
+
+                var t = currentTimestamp - firstTimestamp
+
+                if(color == 'green') {
+                    var elm = document.createElement('div')
+                    elm.innerHTML = '<p><span>t: ' + t / 1000 + ' | delta: ' + gap/1000 + '</span></p><p><small>' + line + '</small></p>'
+                    outputElement.appendChild(elm)
+                }
+
+                elm = document.createElement('div')
+                elm.style.display = 'inline-block'
+                elm.style.width = '8px';
+                elm.style.height = '8px';
+                elm.style.backgroundColor = color
+                outputElement2.appendChild(elm)
+
+                elm = document.createElement('div')
+                elm.textContent = line
+                // elm.style.display = 'block'
+                elm.style.fontSize = '10%';
+                elm.style.color = color
+                elm.style.paddingTop = Math.log2(gap/1000) + 'px'
+                outputElement3.appendChild(elm)
+
+
+                previousTimestamp = currentTimestamp
+            })
+        }
+
+        function extractTime(line) {
+            var timeRegex = new RegExp('(..)/(...)/(....):(..):(..):(..)')
+            var timeArray = timeRegex.exec(line).slice(1)
+            var monthIndex = {
+                Jan: 0,
+                Feb: 1,
+                Mar: 2,
+                Apr: 3,
+                May: 4,
+                Jun: 5,
+                Jul: 6,
+                Aug: 7,
+                Sep: 8,
+                Oct: 9,
+                Nov: 10,
+                Dec: 11,
+            }[timeArray[1]]
+            
+            var millisecondsSinceEpoch = Date.UTC(timeArray[2], monthIndex, timeArray[0], timeArray[3], timeArray[4], timeArray[5])
+            
+            return millisecondsSinceEpoch
+        }
+    </script>
+</body>
+
+
+</html>

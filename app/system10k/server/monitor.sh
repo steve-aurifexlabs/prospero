@@ -1,0 +1,1 @@
+node server/monitor.js >>$HOME/log/monitor.log 2>&1 &

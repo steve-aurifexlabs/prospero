@@ -1,0 +1,140 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf8">
+        <title>co20</title>
+        <!-- <script src="co20.js"></script> -->
+    </head>
+    <body>
+        <canvas width="960" height="540"></canvas>
+        <pre></pre>
+    </body>
+    <script>
+        window.addEventListener('load', function() {
+            var html = `
+                <!doctype html>
+                <html lang="en">
+                    <head>
+                        <meta charset="utf8">
+                        <title>Test webpage</title>
+                    </head>
+                    
+                    <body>
+                        <h1>Preload Heading</h1>
+                        <p>Some paragraph content.</p>
+                    </body>
+
+                    <script>
+                        window.addEventListener('load', function() {
+                            console.log('Page loaded.')
+
+                            window.setTimeout(function() {
+                                document.querySelector('h1').textContent = 'Postload Heading'
+                            }, 3000)
+                        })
+                    </sc` + `ript>
+                    
+                    <style>
+                        p {
+                            margin-left: 20px;
+                        }
+                    </style>
+                </html>
+            `
+            
+            document.querySelector('pre').textContent = html
+            
+            co20(html)
+        })
+
+        function co20(html) {
+            for(var i = 0; i < html.length; i++) {
+                step(html[i])
+            }
+
+            setInterval(function() {
+                step()
+            }, 1000)
+        }
+
+        function step(inputChar) {
+            if(inputChar) {
+                parse(inputChar)
+            }
+        }
+
+        var parserState = 'start'
+        var parserCursor = 0
+        var parserErrorCursor
+        var parserErrorMessage
+        var tokens = []
+        var token = {
+            startIndex: 0,
+        }
+
+        function parse(inputChar) {
+            tokenize(inputChar)
+            parserCursor += 1
+        }
+
+        function tokenize(inputChar) {
+            if(parserState == 'start') {
+                if(inputChar == '<') {
+                    parserState = 'tag'
+                }
+                
+                else {
+                    parserState = 'content'
+                }
+            }
+
+            else if(parserState == 'content') {
+                if(inputChar == '<') {
+                    token.type = 'content'
+                    token.endIndex = parserCursor
+                    // token.value = code.slice(token.startIndex, token.endIndex)
+                    tokens.push(token)
+
+                    token  = {
+                      startIndex: parserCursor,
+                    }
+                    
+                    parserState = 'tag'
+                }
+            }
+
+            else if(parserState == 'tag') {
+                if(inputChar == '<') {
+                    console.log('Expected ">" or anything but "<" at char', parserCursor, 'but got "<"')
+                }
+
+                else if(inputChar == '>') {
+                    token.type = 'tag'
+                    token.endIndex = parserCursor + 1
+                    // token.value = code.slice(token.startIndex, token.endIndex)
+                    tokens.push(token)
+
+                    token  = {
+                      startIndex: parserCursor + 1,
+                    }
+
+                    parserState = 'start'
+                }
+            }
+
+            else {
+                console.log('Fatal error. Bad state', parserState)
+            }
+        }
+    </script>
+    <style>
+        pre {
+            font-size: 75%;
+        }
+
+        canvas {
+            border: 1px solid #222;
+        }
+    </style>
+</html>

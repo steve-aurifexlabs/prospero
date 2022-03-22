@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Status loading...</title>
+	</head>
+	<body>
+		<p id="pl"><span></span></p>
+		<!-- <p id="gpl">gateway.prospero.live - <span></span></p> -->
+		<!-- <p id="nyc30">nyc30.prospero.live - <span></span></p> -->
+		<!-- <p id="sfo20">sfo20.prospero.live - <span></span></p> -->
+		<script>
+			var span = document.querySelector('#pl > span')
+			setInterval(function() {
+				fetch('/status-endpoint')
+				.then(function(response) {
+					if(response.ok) {
+						span.textContent = 'Up'
+						span.style.color = 'green'
+						document.title = 'Good ' + location.hostname
+					} else {
+						span.textContent = 'Down'
+						span.style.color = 'red'
+						document.title = 'ALERT' + location.hostname
+					}
+				})
+				.catch(function(error) {
+					span.textContent = 'Down'
+					span.style.color = 'red'
+					document.title = 'ALERT' + location.hostname
+				})
+			}, 5000)
+
+
+		</script>
+	</body>
+</html>

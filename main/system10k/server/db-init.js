@@ -1,0 +1,4 @@
+dbConnection.query('CREATE TABLE emailAuthCodes (email varchar(255), code char(8), expiresAt timestamp, resendAt timestamp, used boolean, failedAttempt boolean, successfulLogin boolean)', function(e, r) { console.log(e, r) })
+dbConnection.query('CREATE TABLE sessions (sessionId char(64), email varchar(255), sessionExpiresAt timestamp, loggedOut boolean)', function(e, r) { console.log(e, r) })
+dbConnection.query('CREATE TABLE users (email varchar(255), createdAt timestamp, plan varchar(20))', function(e, r) { console.log(e, r) })
+dbConnection.query('CREATE TABLE teams (teamId char(32), createdAt timestamp, creator varchar(255), other varchar(255), inviteAccepted boolean, inviteRejected boolean, nodeId char(5), deleted boolean)', function(e, r) { console.log(e, r) })

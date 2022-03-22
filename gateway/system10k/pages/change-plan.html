@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Change Plan | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Change Plan</h1>
+</header>
+    
+<div>
+    <h2>Current Plan: <span name="current-plan"></span></h2>
+    <button name="small" style="display: none;" type="button">Choose Small Plan</button>
+    <button name="medium" style="display: none;" type="button">Choose Medium Plan</button>
+    <button name="large" style="display: none;" type="button">Choose Large Plan</button>
+    <p>To request access to the XL plan or completely close your account, please email contact@aurifexlabs.com</p>
+    <p name="message"></p>
+</div>
+
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function unAuthed() {
+        location.href = '/'
+    }
+
+    function loadPage(user) {
+        var stripe = Stripe('pk_live_0U9LkWhMwPP49yT8HjKoaeTa')
+        var domain = location.protocol + '//' + location.host
+        var message = document.querySelector('[name="message"]')
+
+        var smallButton = document.querySelector('button[name="small"]')
+        smallButton.addEventListener('click', function(event) {
+            message.textContent = 'Please email contact@aurifexlabs.com to downgrade to the small plan.'
+        })
+        
+        var mediumButton = document.querySelector('button[name="medium"]')
+        mediumButton.addEventListener('click', function(event) {
+            stripe.redirectToCheckout({
+                items: [{
+                    plan: 'plan_GKE47TRaHPP4bo',
+                    quantity: 1,
+                }],
+                successUrl: domain + '/account/plan-changed?plan=medium',
+                cancelUrl: domain + '/account',
+            })
+            .then(function(result) {
+                console.log(result)
+            })
+        })
+
+        var largeButton = document.querySelector('button[name="large"]')
+        largeButton.addEventListener('click', function(event) {
+            stripe.redirectToCheckout({
+                items: [{
+                    plan: 'plan_GKE5IafgPfQSnV',
+                    quantity: 1,
+                }],
+                successUrl: domain + '/account/plan-changed?plan=large',
+                cancelUrl: domain + '/account',
+            })
+            .then(function(result) {
+                console.log(result)
+            })
+        })
+
+        document.querySelector('[name="current-plan"]').textContent = user.plan
+        
+        if(user.plan != 'Small') {
+            document.querySelector('[name="small"]').style.display = 'inline'
+        }
+        
+        if(user.plan != 'Medium') {
+            document.querySelector('[name="medium"]').style.display = 'inline'
+        }
+        
+        if(user.plan != 'Large') {
+            document.querySelector('[name="large"]').style.display = 'inline'
+        }
+
+        document.querySelector('body > div').style.display = 'block'
+        document.querySelector('header [name="email"]').textContent = user.email
+    }
+</script>
+
+</body>
+</html>
+        

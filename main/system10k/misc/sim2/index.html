@@ -1,0 +1,43 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Aurifex Collaborative Code Editing Algorithm Simulator</title>
+        <link rel="index.css">
+    </head>
+    <body>
+        <form>
+            <label>Special Characters</label>
+            <input type="text" name="specialCharacters">
+
+            <label>Max Edits</label>
+            <input type="text" name="maxEdits">
+            
+            <button>New Test</button>
+        </form>
+        
+        <script src="test-simulator.js"></script>
+        <script>
+            var programUnderTest
+
+            fetch('program_under_test.js')
+            .then(function(response) {
+                return response.text()
+            })
+            .then(function(data) {
+                programUnderTest = data
+            })
+
+
+            var form = document.querySelector('form')
+            form.addEventListener('submit', function(event) {
+                event.preventDefault()
+
+                
+
+                return false
+            })
+        </script>
+    </body>
+</html>

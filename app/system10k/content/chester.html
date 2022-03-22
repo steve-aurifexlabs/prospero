@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Chester | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+</style>
+
+<style>
+.version { font-size: 50%; }
+
+.builtins {
+    column-count: 2;
+}
+
+.builtins p {
+    font-family: monospace;
+    font-size: 125%;
+}
+
+article {
+    border: 1px dashed black;
+    padding: 5px;
+    width: 75%;
+}
+</style>
+
+<header>
+    <nav><a href="/">Home</a> <a href="/account">Account</a> <a href="/storage/">Storage</a></nav>
+    <p>Chester is in the early stages of development. Nothing works yet.</p>
+    <h1>Chester <span class="version">v0.1.1</span></h1>
+    <p>... is a general purpose, kitchen sink programming language.</p>
+    <p>... has an interactive web ui for directly expressing abstract syntax trees (ASTs).</p>
+    <p>... runs on a funky in-browser virtual machine (VM), and is deeply machine independent.</p>
+    <p>... allows high-level programming out of the box, but is firmly grounded to the metal.</p>
+    <p>... should be able to implement a wide variety of programming languages naturally, i.e. not just in a turing complete sense.</p>
+</header>
+
+<div>
+    <h2>Language</h2>
+
+    <h3>Axioms</h3>
+    <p>String, Object, Builtin, Array</p>
+
+    <div class="builtins">
+        <h3>Builtins</h3>
+        <p><small>Hello World:</small>
+            <a href="">printHelloWorld</a>
+            <article class="doc" style="display: none;">
+                Prints "Hello, world!" to stdout. Great for getting started.
+                Not so great for anything else.
+                <button>Insert into AST</button>
+            </article>
+        </p>
+        <p><small>Evaluation:</small>
+            <a href="">noeval</a>,
+            <a href="">eval</a>,
+            lazy
+        </p>
+        <p><small>Control Flow:</small> <a href="">if</a>, <a href="">while</a>, for, break, continue</p>
+        <p><small>Assignment:</small> <a href="">assign</a></p>
+        <p><small>Lookup:</small> <a href="">variableLookup</a>, arrayLookup, objectLookup, pointerLookup</p>
+        <p><small>Function:</small> <a href="">call</a>, <a href="">function</a>, <a href="">return</a>, hardwareOperation</p>
+        <p><small>Special Type:</small> ast, bitvector, dynamic, duck, unknown, type, dangerous</p>
+        <p><small>Exception:</small> try, throw, exception, assert</p>
+        <p><small>String:</small> string, concat, slice, parse</p>
+        <p><small>Number:</small> number, <a href="">bigint</a>, fixedint, uint, float, pointer, index</p>
+        <p><small>Arithmetic:</small> add, subtract, multiply, divide</p>
+        <p><small>Bitwise:</small> and, or, not, xor, shift</p>
+        <p><small>Math:</small> cos, sin, squareRoot, pow, round</p>
+        <p><small>Random:</small> random</p>
+        <p><small>Boolean:</small> <a href="">true</a>, <a href="">false</a>, and, or, not</p>
+        <p><small>Equality:</small> equal, notEqual, truthy, falsy</p>
+        <p><small>Comparison:</small> greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual</p>
+        <p><small>Object:</small> object, null, method</p>
+        <p><small>Classical Inheritence:</small> class, instance</p>
+        <p><small>Variable Size Data Structure:</small> list, table, undefined</p>
+        <p><small>Fixed Size Data Structure:</small> array, struct, nullPointer</p>
+        <p><small>Sequence:</small> length</p>
+        <p><small>Json:</small> <a href="">json</a>, jsonGraph</p>
+        <p><small>Concurrency:</small> run, task, queue, shared, simd</p>
+        <p><small>Standard I/O:</small> <a href="">print</a>, input, sendBits, receiveBits</p>
+        <p><small>Graphics:</small> canvas, writePixel, readPixel, drawImage, drawCurve</p>
+        <p><small>Filesystem:</small> readFile, writeFile, crud, filesystem</p>
+        <p><small>Http:</small> fetch, server, request, response</p>
+        <p><small>Builtin:</small> replaceBuiltin, withBuiltin</p>
+        <p><small>Virtual Machine:</small> machine, cpu, fpga, step</p>
+    </div>
+
+    <h3>Standard Library</h3>
+    <p>...</p>
+    
+    <h3>Package Manager</h3>
+    <h4>Libraries</h4>
+    <p>...</p>
+    <h4>Programming Langauges</h4>
+    <p>...</p>
+    <h4>Examples</h4>
+    <p>...</p>
+    <h4>Other</h4>
+    <p>...</p>
+
+    <h3>Your Code</h3>
+    <p>...</p>
+</div>
+
+<div>
+    <h2>AST Builder</h2>
+    
+    <h3>Core</h3>
+    <form>
+        <input type="text">
+        <button>String</button>
+    </form>
+    <form>
+        <button>Array</button>
+        <button>Object</button>
+        <button>Builtin</button>
+    </form>
+    <form>
+        <button>Previous</button>
+        <button>Next</button>
+        <button>In</button>
+        <button>Out</button>
+        <button>Delete</button>
+    </form>
+
+    <h3>Macros</h3>
+    <form>
+        <button>Assignment</button>
+    </form>
+    <form>
+        <button>If</button>
+        <button>Add Else</button>
+        <button>Add Else If</button>
+    </form>
+    <form>
+        <button>While</button>
+    </form>
+    <form>
+        <button>Call Function</button>
+        <button>Define Function</button>
+    </form>
+    <form>
+        <button>Print</button>
+    </form>
+</div>
+
+<div>
+    <h2>Virtual Machine</h2>
+    <h3>Standard Input, Output, Error</h3>
+    <h3>Global Namespace</h3>
+    <h3>Interpreter</h3>
+    <h3>Memory</h3>
+    <h3>Compute</h3>
+    <h3>Graphics</h3>
+    <h3>Filesystem</h3>
+    <h3>Network</h3>
+    <h3>Device I/O</h3>
+    <h3>Secondary Virtual Machines</h3>
+</div>
+
+<div>
+    <h2>History</h2>
+</div>
+
+<div>
+    <h2>Manual</h2>
+</div>
+
+<footer>
+    <p>
+        <a class="not-implemented" href="/terms-of-service">Terms of Service</a>
+        <a class="not-implemented" href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        
+    })
+</script>
+
+</body>
+</html>
+        

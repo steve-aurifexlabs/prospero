@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Code Editor | Aurifex Labs</title>
+</head>
+<body>
+    
+<style>
+body { font-family: sans-serif; }
+body > * { background-color: #efe; }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 0.5em; }
+body > * { margin: 10px; }
+nav, footer { font-size: 75%; }
+nav a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+header [name="email"] { float: right; }
+</style>
+
+<style>
+textarea { font-size: 125%; }
+[name="line-numbers"] { display: inline-block; }
+[name="line-numbers"] { position: relative; top: 4px; }
+[name="line-numbers"] pre { padding: 0; margin: 0; }
+[name="line-numbers"] pre { font-size: 125%; }
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/account">Account</a>
+        <a href="/storage/">Storage</a>
+        <a href="/teams">Teams</a>
+    </nav>
+    <h1>Code Editor</h1>
+    <p name="message"></p>
+</header>
+
+<div name="editor" style="display: none;">
+    <p>
+        <span name="filename"></span>
+        <button name="save">Save</button>
+        <button name="delete">Delete</button>
+    </p>
+
+    <div>
+        <div name="line-numbers">
+        </div>
+        <textarea wrap="off" cols="105" rows="20" spellcheck="false"></textarea>
+    </div>
+</div>
+
+<footer>
+    <p>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2019 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    var filename = decodeURIComponent(location.pathname.slice(7))
+
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                location.href = '/'
+            }
+        }).then(function(user) {
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage(user)
+        })
+    })
+
+    function loadPage(user) {
+        registerSaveShortcut()
+        registerButtons()
+
+        var message = document.querySelector('p[name="message"]')
+        fetch('/api/file?path=' + encodeURIComponent(filename), {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function(response) {
+            if(response.ok) {
+                return response.text()
+            }
+
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+
+            else if(response.status == 404) {
+                message.textContent = 'File not found.'
+            }
+
+            else {
+                message.textContent = 'Error loading file.'
+            }
+        }).then(function(file) {
+            message.textContent = ''
+            document.querySelector('textarea').value = file
+            document.querySelector('div[name="editor"]').style.display = 'block'
+        
+            registerScrollHandler()
+            document.querySelector('textarea').focus()
+        })
+
+        document.querySelector('header [name="email"]').textContent = user.email
+        document.querySelector('[name="filename"]').textContent = filename
+    }
+
+    function registerButtons() {
+        var message = document.querySelector('p[name="message"]')
+        
+        var saveButton = document.querySelector('button[name="save"]')
+        saveButton.addEventListener('click', function (event) {
+            event.preventDefault()
+            saveFile()
+            return false
+        })
+
+        var deleteButton = document.querySelector('button[name="delete"]')
+        deleteButton.addEventListener('click', function (event) {
+            event.preventDefault()
+
+            fetch('/api/deleteFile?path=' + encodeURIComponent(filename), {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.sessionId,
+                },
+            }).then(function (response) {
+                if (response.ok) {
+                    location.href = '/storage/'
+                }
+                
+                else if(response.status == 401) {
+                    location.href = '/'
+                }
+                
+                else {
+                    console.log('Delete failed:', filename)
+                    message.textContent = 'Delete failed.'
+                }
+            })
+
+            return false
+        })
+    }
+
+    function registerSaveShortcut() {
+        window.addEventListener('keydown', function(event) {
+            var key = String.fromCharCode(event.which).toLowerCase()
+            if((event.ctrlKey || event.metaKey) && key == 's') {
+                event.preventDefault()
+                saveFile()
+                return false
+            }
+        })
+    }
+
+    function saveFile() {
+        var fileContents = document.querySelector('textarea').value
+        var message = document.querySelector('p[name="message"]')
+
+        fetch('/api/saveFile?path=' + encodeURIComponent(filename) + '&contents=' + encodeURIComponent(fileContents), {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+            // body: document.querySelector('textarea').value,
+        }).then(function (response) {
+            if (response.ok) {
+                message.textContent = 'File saved.'
+                setTimeout(function() {
+                    message.textContent = ''
+                }, 5000)
+            }
+            
+            else if(response.status == 401) {
+                location.href = '/'
+            }
+            
+            else {
+                console.log('Save failed:', filename)
+                message.textContent = 'Save failed.'
+                setTimeout(function() {
+                    message.textContent = ''
+                }, 5000)
+            }
+        })
+    }
+
+    function registerScrollHandler() {
+        var textarea = document.querySelector('textarea')
+        
+        addLineNumbers()
+        textarea.addEventListener('scroll', function() {
+            addLineNumbers()
+        })
+    }
+    
+    function addLineNumbers() {
+        var textarea = document.querySelector('textarea')
+        var lineNumbersElement = document.querySelector('[name="line-numbers"]')
+        
+        var lineHeight = (textarea.clientHeight + -12) / textarea.rows
+        var startingLineNumber = Math.floor(textarea.scrollTop / lineHeight)
+        var offset = -textarea.scrollTop + 4 + (startingLineNumber * (lineHeight))
+        lineNumbersElement.style.top = offset + 'px'
+
+        lineNumbersElement.innerHTML = ''
+        for(var i=1; i<=textarea.rows + 1; i++) {
+            var p = document.createElement('pre')
+            var n = i + startingLineNumber
+
+            if(n < 10) {
+                p.textContent = ' ' + n.toString()
+            }
+
+            else {
+                p.textContent = n.toString()
+            }
+
+            lineNumbersElement.appendChild(p)
+        }
+    }
+</script>
+
+</body>
+</html>
+        

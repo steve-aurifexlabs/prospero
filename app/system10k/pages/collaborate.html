@@ -1,0 +1,1052 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link rel="shortcut icon" type="image/png" href="data:image/png;base64,">
+    <title>Team ---- | Aurifex Labs</title>
+</head>
+<body>
+    
+<link href="https://fonts.googleapis.com/css?family=Athiti&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=B612+Mono&display=swap" rel="stylesheet"> 
+<style>
+body { font-family: 'Athiti', sans-serif; }
+button { font-family: 'Athiti', sans-serif; }
+/* body { font-family: sans-serif; } */
+body { background-color: #000; }
+body { color: #fff; }
+body { padding: 0; margin: 0; }
+body { font-size: 100%; }
+/* body { line-height: 100% ; } */
+header, footer { font-size: 14px; }
+header a, footer a { padding: 0.25em; }
+/* h2 { text-decoration-line: underline; } */
+h2 { margin: 0; }
+header [name="email"] { position: fixed; right: 5px; }
+header h1 { display: inline; font-size: 14px; margin-left: 30px; }
+footer { font-size: 12px; }
+a:link { color: #88f; }
+a:visited { color: #a8f; }
+
+header { position: fixed; top: -4px; height: 22px; width: 100%; border-bottom: 1px solid grey; background: #222; }
+#main { position: fixed; top: 19px; bottom: 28px; width: 100%; overflow: auto; }
+footer { position: fixed; bottom: 0px; height: 28px; width: 100%; border-top: 1px solid grey; background: #222; }
+
+#left-panel { position: fixed; left: 0px; width: 200px; height: 100%; border-right: 1px solid grey; overflow: auto; }
+#right-panel { position: fixed; right: 0px; width: 133px; height: 100%; border-left: 1px solid grey; overflow: auto; }
+#center-panel { position: fixed; left: 200px; right: 200px; height: 100%; overflow: auto; }
+#status-bar { position: fixed; right: 500px; font-size: 14px; }
+#footer-other { position: fixed; right: 5px; font-size: 12px; margin-top: 1px; }
+
+/* #tabs { position: fixed;  top: 19px; height: 28px; left: 201px; right: 134px; border-bottom: 1px solid #444; background: #444; } */
+/* #tabs { position: fixed;  top: 24px; height: 32px; left: 201px; right: 134px; border-bottom: 1px solid #888; background: #444; } */
+#tabs { position: fixed;  top: 24px; height: 32px; left: 201px; right: 134px; border-bottom: 1px solid #888; }
+/* #tabs { overflow-x: scroll; overflow-y: clip; } */
+/* #tabs { overflow: hidden; } */
+#tabs > * { cursor: pointer; display: inline; white-space: nowrap; overflow: hidden; font-size: 16px; padding: 5px; margin: 0px; border-right: 5px solid #444; background: #222; }
+/* #tabs > * { cursor: pointer; display: inline; white-space: nowrap; overflow: hidden; font-size: 16px; padding: 5px; margin: 0px; width: 170px; height: 18px; border-right: 5px solid #444; background: #222; } */
+#tabs > *.selected { background: #ddd; color: #222; }
+/* #tabs > * > span { display: inline-block; width: 152px; overflow: hidden; } */
+#tabs > * > span { display: inline-block; width: 152px; overflow: hidden; line-height: 105%; }
+/* #tabs > * > span { display: inline-block; width: 152px; overflow-x: scroll; line-height: 105%; } */
+/* #tabs > * > span { display: inline-block; width: 152px; overflow-x: hidden; overflow-y: visible; } */
+#tabs > * > a { padding: 0 6px; font-size: 16px; }
+/* #main-view { position: fixed; top: 48px; bottom: 18px; left: 200px; right: 133px; overflow: auto; } */
+#main-view { position: fixed; top: 62px; bottom: 18px; left: 200px; right: 133px; overflow: auto; }
+
+#left-panel { position: absolute; font-family: monospace; font-size: 14px; top: 0px;  overflow: auto; white-space: nowrap; }
+#left-panel { font-family: 'B612 Mono', monospace; }
+#left-panel pre { margin: 2px; cursor: pointer; }
+.folder { color: #8c8}
+.folder.open { margin-left: 1px; }
+.file { color: #bfb}
+#left-panel { background-color: #111; }
+#right-panel { background-color: #555; }
+/* #main-view { background-color: #777; } */
+
+#right-panel button {
+    font-size: 16.5px;
+    padding: 0;
+    margin: 0;
+    line-height: 80%;
+}
+
+.file.selected { background: #444; }
+.file.selected-blue { background: #224; }
+.file.selected-red { background: #422; }
+
+.down.blue { position: fixed; bottom: 25px; left: 5px; color: #448; cursor: pointer; font-size: 20px; }
+.down.red { position: fixed; bottom: 25px; left: 15px; color: #844; cursor: pointer; font-size: 20px; }
+
+video {
+    width: 100%;
+    max-height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+video.preview {
+    cursor: pointer;
+}
+
+#more-tabs {
+    background-color: #aaa;
+    color: #222;
+    position: fixed;
+    top: 24px;
+    right: 140px;
+    padding: 0 6px;
+    border-radius: 8px;
+    display: none;
+}
+
+</style>
+
+<header>
+    <span name="email">Loading...</span>
+    <a href="/">Home</a>
+    <a href="/account">Account</a>
+    <a href="/storage/">Storage</a>
+    <a href="/teams">Teams</a>
+    <h1>Team ----</h1>
+</header>
+
+<div id="main">
+    <div id="left-panel">
+        <pre class="folder">/</pre>
+    </div>
+
+    <div id="center-panel">
+        <div id="tabs"></div>
+        <div id="main-view"></div>
+    </div>
+    
+    <div id="right-panel">    
+        <button name="share-video" type="click">Share cam/mic</button><button name="share-screen" type="click">Share screen</button>
+        <div style="border: solid 4px #ddd;">
+            <p style="margin: 0; padding-left: 3px; overflow: hidden; white-space: nowrap; border-bottom: solid 1px #ddd;">You</p>
+            <video style="border-bottom: solid 1px #ddd" name="local-video" class="preview" autoplay muted></video>
+            <video name="local-screen" class="preview" autoplay muted></video>
+        </div>
+        <div id="offline"></div>
+    </div>
+</div>
+
+<footer>
+        <span id="status-bar">Loading...</span>
+        <span id="footer-other">
+            <a href="/terms-of-service">Terms of Service</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="mailto:contact@aurifexlabs.com">Contact</a>
+            <span>Copyright 2019 Aurifex Labs LLC</span>
+        </span>
+</footer>
+
+<div id="more-tabs"><span>0</span> more</div>
+
+<script>
+
+    function updateFilesystem() {
+        fetch('/api/folder?team=' + team.teamId, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else if(response.status == 401) {
+                unAuthed()
+            }
+        }).then(function(data) {
+            if(!data) {
+                return
+            }
+            
+            console.log('filesystem:', data)
+        
+            var div = document.querySelector('#left-panel')
+            div.innerHTML = '<pre class="folder open">/</pre>'
+            makeFolderClickable(div.querySelector('pre'), '', '/')
+            
+            addFolder(data, '/', 0)
+
+            function addFolder(folder, path, indentationLevel) {
+                folder.forEach(function(entry) {
+                    var element = document.createElement('pre')
+                    div.appendChild(element)
+
+                    var prefix = ''
+                    for(var i = 0; i < indentationLevel; i++) {
+                        prefix += ' ';
+                    }
+
+                    if(entry.type == 'file') {
+                        element.classList.add('file')
+                        element.textContent = prefix + ' ≡ ' + entry.name
+                        makeFileClickable(element, path, entry.name)
+                    }
+                    
+                    else if(entry.type == 'folder') {
+                        element.classList.add('folder')
+                        element.classList.add('open')
+
+                        element.textContent = prefix + ' ▼ ' + entry.name
+                        makeFolderClickable(element, path, entry.name)
+                        addFolder(entry.contents, path + entry.name + '/', indentationLevel + 1)
+                    }
+                })
+            }
+            
+        })
+    }
+
+    function createFolderView(name, path) {
+        var div = document.createElement('div')
+        div.style.padding = '10px'
+
+        var h2 = document.createElement('h2')
+        h2.textContent = '📂 ' + path + name
+        div.appendChild(h2)
+
+        var p  = document.createElement('p')
+        p.textContent = 'Upload zip and extract to folder'
+        div.appendChild(p)
+
+        var upload = document.createElement('input')
+        upload.setAttribute('type', 'file')
+        div.appendChild(upload)
+
+        var uploadButton = document.createElement('button')
+        uploadButton.setAttribute('type', 'click')
+        uploadButton.textContent = 'Upload zip'
+        div.appendChild(uploadButton)
+
+        var message = document.createElement('p')
+        div.appendChild(message)
+
+        uploadButton.addEventListener('click', function() {
+            if(upload.files[0] === undefined) {
+                message.textContent = 'Choose a file first.'
+                return
+            }
+            
+            if(upload.files[0].type != 'application/zip') {
+                message.textContent = 'Must be a zip file.'
+                return
+            }
+
+            var fullpath
+            if(path && name) {
+                fullpath = path + '/' + name + '/'
+            } else {
+                fullpath = '/'
+            }
+
+            message.textContent = 'Uploading...'
+            fetch('/api/uploadFolder?path=' + encodeURIComponent(fullpath) + '&team=' + encodeURIComponent(team.teamId), {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.sessionId,
+                },
+                body: upload.files[0],
+            }).then(function(response) {
+                if(response.ok) {
+                    message.textContent = 'Upload complete.'
+                    console.log('File uploaded:', upload.files[0].name)
+                    // location.reload() 
+                }
+
+                else if(response.status == 401) {
+                    location.href = '/'
+                }
+
+                else {
+                    message.textContent = "There was an error. Please try again."
+                }
+            })
+
+        })
+
+        return div
+    }
+
+    function createFileView(name, path) {
+        var div = document.createElement('div')
+        div.style.padding = '10px'
+
+        var h2 = document.createElement('h2')
+        h2.textContent = '≡ ' + path + name
+        div.appendChild(h2)
+
+        var code  = document.createElement('pre')
+        code.textContent = 'Loading file...'
+        code.style.fontSize = '16px'
+        div.appendChild(code)
+
+        fetch('/api/team/file?team=' + team.teamId + '&path=' + path + '&filename=' + name, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                if(name.slice(-5) == '.jpeg' || name.slice(-4) == '.png') {
+                    return response.blob()
+                } else {
+                    return response.text()
+                }
+            }
+            
+            else if(response.status == 401) {
+                unAuthed()
+            }
+        }).then(function(data) {
+            if(!data) {
+                return
+            }
+            
+            if(name.slice(-5) == '.jpeg' || name.slice(-4) == '.png') {
+                code.style.display = 'none'
+                var img  = document.createElement('img')
+                img.src = URL.createObjectURL(data)
+                div.appendChild(img)
+
+            } else {
+                code.textContent = data
+            }
+            // console.log('filesystem:', data)
+        })
+
+        return div
+    }
+
+    function makeFolderClickable(elm, path, name) {
+        elm.addEventListener('click', function() {
+            var folderView = createFolderView(name, path)
+
+            var tab
+            if(path) {
+                tab = addTab('📂 ' + name + ' in ' + path, folderView)
+            } else {
+                tab = addTab('📂 ' + name, folderView)
+            }
+            switchTab(tab)
+        })
+    }
+
+    function makeFileClickable(elm, path, name) {
+        elm.addEventListener('click', function() {
+            var fileView = createFileView(name, path)
+
+            var tab = addTab('≡ ' + name + ' in ' + path, fileView)
+
+            switchTab(tab)
+        })
+    }
+
+    function closeTab(tab) {
+        if(tab) {
+            tab.element.remove()
+            tab.remove()
+        }
+
+        updateTabCount()
+    }
+
+    function addTab(name, element, replace) {
+        var alreadyOpen = false
+
+        var tabs = document.querySelector('#tabs')
+        tabs.querySelectorAll('div').forEach(function(tab) {
+            if(tab.name == name) {
+                alreadyOpen = tab
+            }
+        })
+
+        if(alreadyOpen) {
+            return alreadyOpen
+        }
+
+        var tab = document.createElement('div')
+        
+        var span = document.createElement('span')
+        span.textContent = name
+
+        var closeButton = document.createElement('a')
+        closeButton.textContent = 'X'
+        closeButton.style.color = '#888'
+
+        closeButton.addEventListener('click', function(event) {
+            event.preventDefault()
+            event.stopPropagation()
+
+            closeTab(tab)
+
+            return false
+        })
+
+        
+        tab.appendChild(span)
+        tab.appendChild(closeButton)
+
+        tab.name = name
+
+        var tabs = document.querySelector('#tabs')
+        // tabs.appendChild(tab)
+        tabs.insertBefore(tab, tabs.firstChild)
+
+        tab.addEventListener('click', function() {
+            switchTab(tab)
+        })
+
+        tab.element = element
+
+        var mainView = document.querySelector('#main-view')
+        tab.element.style.display = 'none'
+        mainView.appendChild(tab.element)
+
+        updateTabCount()
+
+        return tab
+    }
+
+    function updateTabCount() {
+        var tabs = document.querySelector('#tabs')
+        var tab = tabs.querySelector('div')
+
+        if(tabs.scrollWidth > tabs.clientWidth) {
+            var numOffscreenElements = Math.ceil((tabs.scrollWidth - tabs.clientWidth) / tab.offsetWidth)
+            document.querySelector('#more-tabs span').textContent = numOffscreenElements.toString()
+            document.querySelector('#more-tabs').style.display = 'block'
+        } else {
+            document.querySelector('#more-tabs').style.display = 'none'
+        }
+    }
+
+    function switchTab(tab) {
+        var tabs = document.querySelector('#tabs')
+        tabs.querySelectorAll('div').forEach(function(t) {
+            t.classList.remove('selected')
+            t.element.style.display = 'none'
+        })
+
+        tab.classList.add('selected')
+        tab.element.style.display = 'block'
+    }
+
+    var firstClick = false
+    window.addEventListener('click', function() {
+        firstClick = true
+        if(team) {
+            Object.values(team.members).forEach(function(peer) {
+                var peerElement = peer.peerElement
+                if(peerElement !== undefined) {
+                    var peerCameraElement = peerElement.querySelector('[name="camera"]')
+                    peerCameraElement.muted = false
+                }
+            })
+        }
+    })
+
+    window.addEventListener('DOMContentLoaded', function (event) {
+        fetch('/api/user', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.sessionId,
+            },
+        }).then(function (response) {
+            if (response.ok) {
+                return response.json()
+            }
+            
+            else {
+                unAuthed()
+            }
+        }).then(function(data) {
+            user = data
+
+            if(!user) {
+                return
+            }
+            
+            console.log('user:', user)
+            
+            loadPage()
+        })
+    })
+
+    function unAuthed() {
+        location.href = '/'
+        // document.querySelector('header [name="email"]').textContent = 'You are not logged in.'
+    }
+
+    var user
+    var yourEmail
+    
+    var shortTeamId = location.search.split('id=')[1].slice(0, 4)
+    var team
+
+    var webSocket
+
+    var localVideoStream
+    var localScreenStream
+
+    var colors = ['#f33', '#3f3', '#33f', '#ff3', '#f3f', '#3ff', '#afa']
+    var colorCursor = 0
+
+    function loadPage() {
+        yourEmail = user.email
+        
+        document.querySelector('header [name="email"]').textContent = user.email
+        document.title = 'Team ' + shortTeamId + ' | Aurifex Labs'
+        document.querySelector('h1').textContent = 'Team ' + shortTeamId
+
+        team = getTeam(shortTeamId)
+        updateOfflineList()
+
+        document.querySelector('button[name="share-video"]').addEventListener('click', function() {
+            shareVideo()
+        })
+        
+        document.querySelector('button[name="share-screen"]').addEventListener('click', function() {
+            shareScreen()    
+        })
+
+        connect()
+
+        setInterval(function () {
+            if(webSocket === undefined || webSocket.readyState == WebSocket.CLOSED) {
+                connect()
+            }
+       
+            else if (webSocket.readyState == WebSocket.OPEN) {
+                webSocket.send(JSON.stringify({
+                    type: 'ping',
+                }))
+            }
+        }, 1 * 1000)
+    }
+
+    function connect() {
+        console.log('connect')
+
+        var statusElement = document.querySelector('#status-bar')
+        statusElement.textContent = 'Connecting...'
+
+        var webSocketProtocol = 'wss:'
+        if(location.protocol == 'http:') {
+            webSocketProtocol = 'ws:'
+        } 
+
+        webSocket = new WebSocket(webSocketProtocol + '//' + location.host)
+        
+        webSocket.addEventListener('open', function (event) {
+            statusElement.textContent = 'Connected.'
+
+            var message = {
+                type: 'authorization',
+                authorization: 'Bearer ' + localStorage.sessionId,
+                team: shortTeamId, 
+            }
+
+            webSocket.send(JSON.stringify(message))
+        })
+
+        webSocket.addEventListener('message', function (event) {
+            var message = JSON.parse(event.data)
+            console.log(message)
+
+            if(message.type == 'authenticated') {
+                message.onlineTeam.forEach(function(email) {
+                    if(email == user.email) return
+
+                    console.log(team)
+                    team.members[email].online = true
+                    if(!team.members[email].peerElement) {
+                        team.members[email].peerElement = addPeerElement(email)
+                    }
+
+                    if(localVideoStream) {
+                        team.members[email].peerConnections.toVideo = call(email, 'toVideo')
+                    }
+                    if(localScreenStream) {
+                        team.members[email].peerConnections.toScreen = call(email, 'toScreen')
+                    }
+                })
+
+                updateOfflineList()
+                updateFilesystem()
+            }
+
+            if(message.type == 'filesystem-changed') {
+                updateFilesystem()
+            }
+
+            if(message.type == 'joined') {
+                var email = message.email
+                
+                team.members[email].online = true  
+
+                if(!team.members[email].peerElement) {
+                    team.members[email].peerElement = addPeerElement(email)
+                }
+
+                team.members[email].peerConnections.data = call(email, 'data')
+
+                if(localVideoStream) {
+                    team.members[email].peerConnections.toVideo = call(email, 'toVideo')
+                }
+                if(localScreenStream) {
+                    team.members[email].peerConnections.toScreen = call(email, 'toScreen')
+                }
+
+                updateOfflineList()
+            }
+            
+            if(message.type == 'left') {
+                var email = message.email
+                team.members[email].online = false
+
+                if(team.members[email].peerElement) {
+                    var cameraElement = team.members[email].peerElement.querySelector('[name="camera"]')
+                    if(cameraElement) {
+                        closeTab(cameraElement.mainVideoTab)
+                    }
+                    
+                    var screenElement = team.members[email].peerElement.querySelector('[name="screen"]')
+                    if(screenElement) {
+                        closeTab(screenElement.mainVideoTab)
+                    }
+
+                    team.members[email].peerElement.remove()
+                    delete team.members[email].peerElement
+                }
+
+                team.members[email].peerConnections = {}
+                delete team.members[email].dataChannel
+
+                updateOfflineList()
+            }
+
+            else if(message.type == 'iceCandidate') {
+                var candidate = new RTCIceCandidate(message.candidate)
+
+                var peer = team.members[message.from]
+                
+                if(peer.peerConnections[message.channel]) {
+                    var peerConnection = peer.peerConnections[message.channel]
+                    peerConnection.addIceCandidate(candidate)
+                    
+                    if(!peer.peerConnections[message.channel].remoteDescription) {
+                        console.log('got ice message too early: no remoteDescription')
+                    }
+                }
+                
+                else {
+                    console.log('got ice message too early: no peerConnection')
+                }
+            }
+            
+            else if(message.type == 'answer') {
+                var peer = team.members[message.from]
+                var sessionDescription = new RTCSessionDescription(message.answer)
+                var peerConnection = peer.peerConnections[message.channel]
+                peerConnection.setRemoteDescription(sessionDescription)
+            }
+            
+            else if(message.type == 'offer') {
+                var toEmail = message.from
+                var peer = team.members[message.from]
+                
+                var peerConnection = createPeerConnection(toEmail, message.channel)
+                peer.peerConnections[message.channel] = peerConnection
+
+                var sessionDescription = new RTCSessionDescription(message.offer)
+
+                peerConnection.setRemoteDescription(sessionDescription)
+                .then(function() {
+                    return peerConnection.createAnswer()
+                })
+                .then(function(answer) {
+                    return peerConnection.setLocalDescription(answer)
+                })
+                .then(function() {
+                    webSocket.send(JSON.stringify({
+                        type: 'answer',
+                        answer: peerConnection.localDescription,
+                        to: toEmail,
+                        from: yourEmail,
+                        channel: reverseChannel(message.channel),
+                    }))
+                })
+            }
+        })
+
+        webSocket.addEventListener('error', function (event) {
+            statusElement.textContent = 'Disconnected. Trying to reconnect...'
+            console.log('webSocket error:', event)
+            closeWebSocket()
+        })
+        
+        webSocket.addEventListener('close', function (event) {
+            statusElement.textContent = 'Disconnected. Trying to reconnect...'
+            console.log('webSocket closed:', event)
+            closeWebSocket()
+        })
+    }
+
+    function closeWebSocket() {
+        Object.values(team.members).forEach(function(peer) {
+            if(peer.peerElement) {
+                peer.peerElement.remove()
+                delete peer.peerElement
+            }
+
+            peer.online = false
+
+            peer.peerConnections = {}
+            delete peer.dataChannel
+        })
+
+        updateOfflineList()
+    }
+
+    function shareVideo() {
+        navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        }).then(function(localStream) {
+            localVideoStream = localStream
+
+            var tabName = 'Camera (yours)'
+
+            var localVideo = document.querySelector('video[name="local-video"]')
+            localVideo.addEventListener('click', function() {
+                var video
+                if(!localVideo.mainVideo) {
+                    video = document.createElement('video')
+                    video.autoplay = true
+                    video.muted = true
+                    localVideo.mainVideo = video
+                } else {
+                    video = localVideo.mainVideo
+                }
+
+                var tab = addTab(tabName, video)
+                // updateTab(tabName, video)
+                switchTab(tab)
+
+                video.srcObject = localStream
+            })
+
+            localVideo.srcObject = localStream
+
+            if(localVideo.mainVideo) {
+                localVideo.mainVideo.srcObject = localStream
+                // updateTab(tabName, video)
+            }
+            
+
+            Object.values(team.members).forEach(function(peer) {
+                if(peer.online) {
+                    peer.peerConnections.toVideo = call(peer.email, 'toVideo')
+                }
+            })
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+    }
+
+    function shareScreen() {
+        navigator.mediaDevices.getDisplayMedia()
+        .then(function(localStream) {
+            localScreenStream = localStream
+
+            var tabName = 'Screen (yours)'
+
+            var localScreen = document.querySelector('video[name="local-screen"]')        
+            // var video
+            localScreen.addEventListener('click', function() {
+                var video
+                if(!localScreen.mainVideo) {
+                    video = document.createElement('video')
+                    video.autoplay = true
+                    video.muted = true
+                    localScreen.mainVideo = video
+                } else {
+                    video = localScreen.mainVideo
+                }
+
+                var tab = addTab(tabName, video)
+                // updateTab(tabName, video)
+                switchTab(tab)
+
+                video.srcObject = localStream
+            })
+            
+            localScreen.srcObject = localStream
+
+            if(localScreen.mainVideo) {
+                localScreen.mainVideo.srcObject = localStream
+                // updateTab(tabName, video)
+            }
+            
+            
+            Object.values(team.members).forEach(function(peer) {
+                if(peer.online) {
+                    peer.peerConnections.toScreen = call(peer.email, 'toScreen')
+                }
+            })
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+    }
+
+    function reverseChannel(channel) {
+        if(channel == 'toVideo') return 'fromVideo'
+        if(channel == 'toScreen') return 'fromScreen'    
+        if(channel == 'fromVideo') return 'toVideo'
+        if(channel == 'fromScreen') return 'toScreen'    
+        if(channel == 'data') return 'data'    
+    }
+
+    function addPeerElement(toEmail) {
+        var peerElement
+
+        var color = colors[colorCursor]
+        colorCursor += 1
+        if(colorCursor >= colors.length) {
+            colorCursor = 0
+        }
+
+        peerElement = document.createElement('div')
+        peerElement.style.border = 'solid 4px ' + color
+        
+        var p = document.createElement('p')
+        p.textContent = toEmail
+        p.style.margin = '0'
+        p.style.paddingLeft = '3px'
+        p.style.borderBottom = 'solid 1px ' + color
+        p.style.overflow = 'hidden'
+        p.style.whiteSpace = 'nowrap'
+        peerElement.appendChild(p)
+        
+        var peerVideoElement = document.createElement('video')
+        peerVideoElement.setAttribute('name', 'camera')
+        peerVideoElement.autoplay = true
+        if(!firstClick) {
+            peerVideoElement.muted = true
+        }
+        peerVideoElement.style.borderBottom = 'solid 1px ' + color
+        peerElement.appendChild(peerVideoElement)
+        
+        peerVideoElement.addEventListener('click', function() {
+            var video = document.createElement('video')
+            video.autoplay = true
+            video.muted = true
+            peerVideoElement.mainVideo = video
+
+            var tabName = 'Camera (' + toEmail + ')'
+            var tab = addTab(tabName, video)
+            // updateTab(tabName, video)
+            switchTab(tab)
+
+            peerVideoElement.mainVideoTab = tab
+
+            video.srcObject = peerVideoElement.srcObject
+        })
+
+        var peerScreenElement = document.createElement('video')
+        peerScreenElement.setAttribute('name', 'screen')
+        peerScreenElement.autoplay = true
+        peerScreenElement.muted = true
+        peerElement.appendChild(peerScreenElement)
+
+        peerScreenElement.addEventListener('click', function() {
+            var video = document.createElement('video')
+            video.autoplay = true
+            video.muted = true
+            peerScreenElement.mainVideo = video
+
+            var tabName = 'Screen (' + toEmail + ')'
+            var tab = addTab(tabName, video)
+            // updateTab(tabName, video)
+            switchTab(tab)
+
+            peerScreenElement.mainVideoTab = tab
+
+            video.srcObject = peerScreenElement.srcObject
+        })
+
+        var offlineList = document.querySelector('#offline')
+        document.querySelector('#right-panel').insertBefore(peerElement, offlineList)
+
+        return peerElement
+    }
+
+    function createPeerConnection(toEmail, channel) {
+        var peer = team.members[toEmail]
+
+        var peerConnection = new RTCPeerConnection({
+            iceServers: [{
+                urls: ["stun:aurifexlabs.com:3478", 'turn:aurifexlabs.com:3478' ],
+                username: 'username2',
+                credential: 'oGtata8EdBtFhQUc',
+            }]
+        })
+                
+        peerConnection.onicecandidate = function(event) {
+            if(event.candidate) {
+                webSocket.send(JSON.stringify({
+                    type: 'iceCandidate',
+                    candidate: event.candidate,
+                    to: toEmail,
+                    from: yourEmail,
+                    channel: reverseChannel(channel),
+                }))
+            }
+        }
+
+        peerConnection.ontrack = function(event) {
+            console.log('ontrack', toEmail, event.streams)
+            console.log('ontrack channel', channel)
+
+            var videoElement
+            // var tabName
+
+            if(channel == 'fromVideo') {
+                videoElement = team.members[toEmail].peerElement.querySelector('[name="camera"]')
+                // tabName = 'Camera (' + toEmail + ')'
+            }
+            if(channel == 'fromScreen') {
+                videoElement = team.members[toEmail].peerElement.querySelector('[name="screen"]')
+                // tabName = 'Screen (' + toEmail + ')'
+            }
+
+            videoElement.srcObject = event.streams[0]
+            if(videoElement.mainVideo) {
+                videoElement.mainVideo.srcObject = event.streams[0]
+            }
+            // updateTab(tabname, videoElement.mainVideo)
+        }
+
+        peerConnection.ondatachannel = function(event) {
+            var dataChannel = event.channel
+            team.members[toEmail].dataChannel = dataChannel
+            
+            dataChannel.onopen = function(event) {
+                console.log('dataChannel opened from', toEmail)
+            }
+
+            dataChannel.onmessage = function(event) {
+                console.log('dataChannel message from', toEmail + ':', event.data)
+            }
+        }
+
+        return peerConnection
+    }
+    
+    function call(toEmail, channel) {
+        console.log('call', toEmail, channel)
+        var peerConnection = createPeerConnection(toEmail, channel)
+
+        peerConnection.onnegotiationneeded = function(event) {
+            peerConnection.createOffer()
+            .then(function(offer) {
+                return peerConnection.setLocalDescription(offer)
+            })
+            .then(function() {
+                console.log('send offer')
+                webSocket.send(JSON.stringify({
+                    type: 'offer',
+                    offer: peerConnection.localDescription,
+                    to: toEmail,
+                    from: yourEmail,
+                    channel: reverseChannel(channel),
+                }))
+            })
+        }
+
+        if(channel == 'toVideo') {
+            localVideoStream.getTracks().forEach(function(track) {
+                peerConnection.addTrack(track, localVideoStream)
+            })
+        }
+
+        if(channel == 'toScreen') {
+            localScreenStream.getTracks().forEach(function(track) {
+                peerConnection.addTrack(track, localScreenStream)
+            })
+        }
+
+        if(channel == 'data') {
+            var dataChannel = peerConnection.createDataChannel('data')
+            team.members[toEmail].dataChannel = dataChannel
+
+            dataChannel.onopen = function(event) {
+                console.log('dataChannel opened to', toEmail)
+            }
+
+            dataChannel.onmessage = function(event) {
+                console.log('dataChannel message from', toEmail + ':', event.data)
+            }
+        }
+
+        return peerConnection
+    }
+
+    function getTeam(shortTeamId) {
+        var result = null
+
+
+        user.teams.forEach(function(t) {
+            var teamId = t.teamId
+            if(teamId.slice(0, 4) == shortTeamId) {
+                result = t
+            }
+        })
+
+        var teamObject = {}
+        result.members.forEach(function(email) {
+            if(user.email != email) {
+                teamObject[email] = {
+                    email: email,
+                    online: false,
+                    peerConnections: {},
+                }
+            }
+        })
+
+        result.members = teamObject
+
+        return result
+    }
+
+    function updateOfflineList() {
+        var offlineList = document.querySelector('#offline')
+        offlineList.innerHTML = '<p name="title" style="margin: 1px; text-decoration: underline;">Offline</p>'
+
+        var anyOffline = false
+        Object.values(team.members).forEach(function(peer) {
+            if(!peer.online) {
+                var p = document.createElement('p')
+                p.textContent = peer.email
+                p.style.margin = '3px'
+                p.style.overflow = 'hidden'
+                p.style.whiteSpace = 'nowrap'
+                offlineList.appendChild(p)
+                anyOffline = true
+            }
+        })
+
+        if(!anyOffline) {
+            offlineList.querySelector('[name="title"]').style.display = 'none' 
+        }
+    }
+</script>
+
+</body>
+</html>
+        

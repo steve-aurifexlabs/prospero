@@ -1,0 +1,58 @@
+-environment- web dev
+
+-import- https string logging json date crypto fs env email db cron wabt :
+	from string exactly startsWith
+	from logging log
+|
+
+-main- https . server ( 'https://pantrypantrypantry.com' :
+	GET exactly '/' or startWith '/?' ::
+		call fs . read ( 'index.html'
+		then -> data :::
+			200 data.toString()
+		|||
+        error :::
+		500 'Cannot load file. Try again later.'
+	|||
+	||
+
+	POST startsWith'/api/newsletter' ::
+		var emailAddress = string req . args . email
+			error :::
+			400 'Invalid request. Refresh and try again.'
+    	|||
+                
+		var emailContents = string multiline :::
+			You have signed up for the newsletter!
+
+			- The Pantry Team
+		|||
+        
+        async email . sendEmail ( 'contact@prospero.live' emailAddress emailContents
+		then :::
+    		log 'Newsletter signup email sent to ' emailAddress
+        	
+			var data = json '{ "email": "' string url.args.email  '", "joinedAt": "' string date.now() '" }'
+			
+			async db . insert ( 'newsletter' data
+			then ::::
+            	200 'Signed up for newsletter!'
+			||||
+			error ::::
+            	500 'Database write error. Try again later.'
+			||||
+		|||
+		error :::
+        	500 'Could not sign up for the newsletter. Try again later.'
+		|||
+
+	ELSE ::
+    	404 'File not found.'
+	||
+|
+
+-helpers- authenticate:
+	FUNC authenticate ( email code ::
+    	log 'TODO'
+	||
+|

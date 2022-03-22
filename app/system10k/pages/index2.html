@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf8">
+    <link href="https://fonts.googleapis.com/css?family=Averia+Sans+Libre&display=swap" rel="stylesheet">
+    <title>Aurifex Labs</title>
+</head>
+<body>
+
+<style>
+body { font-family: 'Averia Sans Libre', sans-serif; }
+button { font-family: 'Averia Sans Libre', sans-serif; }
+input { font-family: 'Averia Sans Libre', sans-serif; }
+
+body { background-color: rgb(245, 255, 243); }
+body > * { background: repeat url("/epaper.png"); }
+body > * { outline: 1px dotted #444; }
+body > * { padding: 1.5em; }
+body > * { margin: 20px 10px; }
+
+nav, footer { font-size: 75%; }
+header a, footer a { padding: 0.25em; }
+h2 { text-decoration-line: underline; }
+ul { list-style: none; padding-left: 0; margin-left: 15px; }
+ul li::before { content: "- " }
+
+button {
+    padding: 5px;
+    color: #000;
+    background-color: rgb(193, 251, 138);
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button:hover {
+    background-color: rgb(171, 255, 92);
+    cursor: pointer;
+}
+</style>
+
+<style>
+h3 { text-decoration: underline; }
+
+.plans div {
+    border: 1px solid #aaa;
+    background-color: #fff;
+    padding: 1%;
+    margin: 1%;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+}
+
+.plans section div {
+    display: inline-block;
+}
+
+header button { font-size: 125%; }
+header input { font-size: 125%; }
+
+header button {
+    padding: 10px;
+}
+</style>
+
+<header>
+    <form style="float: right;">
+        <input style="width: 235px; margin: 5px;" type="text" name="email" autocomplete="email" autofocus placeholder="Email">
+        <br>
+        <button style="float: right; width: 250px; margin: 5px;" type="submit">Login or create account (free)</button>
+        <p name="message"></p>
+    </form>
+    
+    <h1 style="margin-bottom: 0px;">Aurifex Labs</h1>
+    <!-- <h1 style="margin-bottom: 0px;">Prospero.Live</h1> -->
+    <!-- <p style="margin-top: 0px; font-size: 75%;">by Aurifex Labs</p> -->
+    <p style="margin-top: 0px; margin-bottom: 75px;">Real-time collaboration for software developers</p>
+    <!-- <button type="click" style="font-size: 175%; color: #000;">Try it free. No account required.</button> -->
+</header>
+
+<div style="padding-bottom: 20px;">
+    <img style="float: right; margin: 10px; max-width: 90%;" src="/team.jpg">
+    
+    <h2>Features</h2>
+    <ul style="columns: 300px;">
+        <li style="color: #aaa;">Collaborative editor (coming soon)</li>
+        <li>Video chat + screen sharing</li>
+        <li style="color: #aaa;">Real-time source control (coming later)</li>
+        <li style="color: #aaa;">CLI client w/ file sync (much later)</li>
+    </ul>
+
+    <br>
+
+    <h2>Useful for</h2>
+    <ul style="columns: 300px;">
+        <li>Pair programming</li>
+        <li>Code reviews</li>
+        <li>Distributed teams</li>
+        <li>Interviews</li>
+        <li>Teaching / Tutoring</li>
+        <li>Hackathons / Game jams</li>
+    </ul>
+
+    <br>
+
+    <h2>Plans</h2>
+    <div class="plans">
+        <div>
+            <h3>Small - <span style="font-size: 200%">Free</span></h3>
+            <p><b>2 users</b> per team max.</p>
+            <p><b>4 MB</b> storage</p>
+            <p><b>4 hrs</b> of video chat + screen sharing per month</p>
+        </div>
+        <section>
+            <div>
+                <h3>Medium - <span style="font-size: 200%">$5</span> / user / month</span></h3>
+                <p><b>4 users</b> per team max.</p>
+                <p><b>32 MB</b> storage</p>
+                <p><b>32 hrs</b> of video chat + screen sharing per month</p>
+            </div>
+            <div style="padding: 30px; max-width: 80%;">
+                <h3>Large - <span style="font-size: 200%">$10</span> / user / month</h3>
+                <p><b>8 users</b> per team max.</p>
+                <p><b>1 GB</b> storage</p>
+                <p><b>Unlimited</b> video chat + screen sharing</p>
+            </div>
+            <div>
+                <h3>XL - <span style="font-size: 200%">$20</span> / user / month</h3>
+                <p><b>Unlimited</b> team size</p>
+                <p><b>4 GB</b> storage included <small>($1 / GB / month for extra storage)</small></p>
+                <p><b>Unlimited</b> video chat + screen sharing</p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<form name="question">
+    <p>When you write software as part of a team, what's your biggest pain point?</p>
+    <input type="text" name="answer" placeholder="">
+    <button type="submit">Gripe</button>
+    <p name="message"></p>
+</form>
+
+<footer>
+    <p>
+        <a href="/content">Content</a>
+        <a href="/terms-of-service">Terms of Service</a>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <a href="mailto:contact@aurifexlabs.com">Contact</a>
+        <span>Copyright 2020 Aurifex Labs LLC</span>
+    </p>
+</footer>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function (event) {
+        var form = document.querySelector('header form')
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault()
+
+            var message = form.querySelector('p[name="message"]')
+
+            var email = form.querySelector('input[name="email"]').value
+            if (!email || !email.includes('@') || email.length > 254) {
+                message.textContent = 'Please enter a valid email address.'
+                return false
+            }
+
+            message.textContent = 'Sending request...'
+            fetch('/api/start?email=' + encodeURIComponent(email), {
+                method: 'POST',
+            }).then(function (response) {
+                if (response.ok) {
+                    localStorage.unverifiedEmail = email
+                    location.href = "/email-auth"
+                }
+                
+                else {
+                    if(response.status == 501) {
+                        message.textContent = 'User accounts have not been implemented. Please check in later.'
+                    }
+                    
+                    else {
+                        message.textContent = 'There was an error. Please try again. If you just requested a code, you must wait 30 seconds before requesting a new one.'
+                    }
+                }
+            })
+
+            return false
+        })
+
+        var form2 = document.querySelector('form[name="question"]')
+
+        form2.addEventListener('submit', function (event) {
+            event.preventDefault()
+
+            var message = form2.querySelector('p[name="message"]')
+
+            var answer = form2.querySelector('input[name="answer"]').value
+            form2.querySelector('input[name="answer"]').value = ''
+
+            message.textContent = 'Sending request...'
+            fetch('/api/gripe?answer=' + encodeURIComponent(answer), {
+                method: 'POST',
+            }).then(function (response) {
+                
+                message.textContent = 'Thanks for the gripe. Feel free to email contact@aurifexlabs.com with the long form version.'
+            })
+
+            return false
+        })
+    })
+</script>
+</body>
+</html>

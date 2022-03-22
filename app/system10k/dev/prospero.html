@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' blob:; style-src 'self' 'unsafe-inline'; frame-src 'self' blob:; media-src 'self' blob:;">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico">
+        <title>DEVELOPMENT! - Prospero.Live</title>
+
+        <script src="/lib/codemirror/codemirror.js"></script>
+        <link rel="stylesheet" href="/lib/codemirror/codemirror.css">
+        <link rel="stylesheet" href="/lib/codemirror/theme/vscode-dark.css">
+        <script src="/lib/codemirror/syntax.js"></script>
+        <link href="/static/css/prospero.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div id="main">
+            <span id="main-title">
+                Prospero.Live
+            </span>
+            <span id="storage"></span>
+            
+            <div id="left-panel">
+                <p>Loading...</p>
+            </div>
+
+            <div id="center-panel">
+                <div id="other-tabs"></div>
+                <!-- <div id="third-tabs"></div> -->
+                <div id="tabs"></div>
+                <div id="doc-header">
+                    <div></div>
+                    <h2></h2>
+                </div>
+                <div id="main-view"></div>
+            </div>
+            
+            <button id="exit">
+                Back to Dashboard
+            </button>
+            
+            <button id="whiteboard">
+                Whiteboard<br>
+                <img id="eraser" src="/static/images/eraser.png">
+                <img src="/static/images/blackpen.png">
+                <img src="/static/images/bluepen.png">
+                <img src="/static/images/redpen.png">
+                <img src="/static/images/greenpen.png">
+                <img src="/static/images/graypen.png">
+                <img src="/static/images/whitepen.png">
+            </button>
+
+            <button name="share-video">
+                🎥🎙️ Video Call
+            </button>
+            <button name="share-screen">
+                🖥️ Share Screen
+            </button>
+            
+            <div id="right-panel">
+                <div id="teammate-outer">
+                    <p>Waiting for <span id="teammate"></span></p>
+                </div>
+                <div id="third-outer">
+                    <p>Waiting for <span id="third"></span></p>
+                </div>
+                <div id="your-element">
+                    <p name="your-email"></p>
+                    <video name="local-video" class="preview" autoplay muted></video>
+                    <video name="local-screen" autoplay muted></video>
+                    <div class="demo"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <span id="status-bar">Loading...</span>
+            <span id="fps"></span>
+            <span id="feedback">
+                DEVELOPMENT! ---- Feedback:<a href="mailto:contact@prospero.live">contact@prospero.live</a>
+                <!-- Requested features: tabs/spaces, whiteboard visibility without screen sharing, multiple file select -->
+            </span>
+            <span id="right-footer">
+                <!-- <a id="logout" href="#tabs-spaces">Tabs/Spaces</a> -->
+                <!-- <a id="logout" href="#logout">Logout</a> -->
+                <a href="https://prospero.live">Home</a>
+                <a href="https://prospero.live/terms-of-service" target="_blank">Terms</a>
+                <a href="https://prospero.live/privacy-policy" target="_blank">Privacy</a>
+                <a href="https://prospero.live/cookies-policy" target="_blank">Cookies Policy</a>
+                <a href="mailto:contact@prospero.live">Contact</a>
+                <span>Copyright 2019-2021 Aurifex Labs LLC</span>
+            </span>
+        </footer>
+
+        <div id="more-tabs"><span>0</span> more</div>
+        <div id="context-menu"></div>
+        <div id="modal"></div>
+        <div id="modal-overlay"></div>
+
+        <div id="getting-started">
+            <h2>Getting Started</h2>
+        </div>
+
+        <audio id="bell" src="/static/audio/bell.ogg"></audio>
+
+        <script src="/static/javascript/collab-editor.js"></script>
+        <script src="/static/javascript/editor-wrapper.js"></script>
+        <script src="/static/javascript/filesystem.js"></script>
+        <script src="/static/javascript/video-conference.js"></script>
+        <script src="/static/javascript/ui.js"></script>
+        <script src="/static/javascript/tabs.js"></script>
+        <script src="/static/javascript/helpers.js"></script>
+        <script src="/static/javascript/whiteboard.js"></script>
+        <script src="/static/javascript/prospero.js"></script>
+
+        <!-- <script src="/static/javascript/collab-test.js"></script> -->
+    </body>
+</html>

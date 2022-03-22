@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+        <link rel="shortcut icon" type="image/x-icon" href="/static/images/favicon.ico">
+        <title>Email Authentication | Prospero.Live</title>
+        <link href="/static/css/theme.css" rel="stylesheet">
+    </head>
+    <body>      
+        <header>
+            <p class="big-title">Prospero.Live</p>
+            <h1>Enter Code</h1>
+            <p>
+                <span class="extra-large" id="short-teamid"></span>
+                <span id="rest-teamid"></span>
+            </p>
+            <p><a href="https://dev.prospero.live/user/dashboard">Back to dashboard</a></p>
+        </header>
+
+        <form>
+            <p>Check your email for an authentication code.</p>
+            <label name="code">Code</label>
+            <input type="text" name="code" autofocus>
+            <button type="submit">Authenticate Email</button>
+            <p name="message"></p>
+            <small>
+                <p name="new-code">You can request a new code in <span name="new-code-time">30</span> seconds.</p>
+            </small>
+        </form>
+
+        <footer>
+            <p>
+                <a href="https://prospero.live">Home</a>
+                <a href="https://prospero.live/terms-of-service" target="_blank">Terms of Service</a>
+                <a href="https://prospero.live/privacy-policy" target="_blank">Privacy Policy</a>
+                <a href="mailto:contact@aurifexlabs.com">Contact</a>
+                <span>Copyright 2020-2021 Aurifex Labs LLC</span>
+                <img src="/static/images/footer.jpg">
+            </p>
+        </footer>
+
+        <script src="/static/javascript/email-verification.js"></script>
+    </body>
+</html>
+        

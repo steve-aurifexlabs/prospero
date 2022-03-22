@@ -1,0 +1,179 @@
+
+'node dependencies'
+var http = require('http')
+var url = require('url')
+var fs = require('fs')
+// var crypto = require('crypto')
+var process = require('process')
+
+'npm dependencies'
+var postgres = require('pg')
+// var postmark = new (require('postmark').ServerClient)(process.env.POSTMARK_KEY)
+
+'ephemerals'
+var userStorage = {}
+
+'start db'
+var dbConnection = new postgres.Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        ca: fs.readFileSync('./server/ca_cert.crt').toString(),
+        rejectUnauthorized: true,
+    },
+})
+dbConnection.connect()
+dbConnection.query('SELECT NOW()', function(error, response) {
+    console.log('SELECT NOW():', response.rows, 'Date.now()', new Date(Date.now()))
+})
+
+'start'
+process.title = 'prospero-gateway'
+var server = http.createServer(handleRequest)
+
+server.listen(8080)
+console.log('Started gateway server on port 8080.')
+
+'handleRequest'
+function handleRequest(req, res) {
+    console.log('\n#### START REQUEST ####')
+    console.log('Request from:', req.connection.remoteAddress)
+    console.log('Request to:', req.connection.localAddress, req.connection.localPort)
+    console.log(req.method, req.url, 'at', new Date())
+    console.log('with headers:', req.headers)
+    
+    var urlArgs = JSON.parse(JSON.stringify(url.parse(req.url, true).query))
+    console.log('urlArgs:', urlArgs)
+    console.log('custom log:')
+
+    if(req.method == 'POST' && req.url.startsWith('/gateway/auth')) {
+        if(!authenticate(req)) {
+            res.writeHead(401)
+            res.end()
+            return
+        }
+
+        var email = urlArgs.email
+        var teamId = urlArgs.team
+
+        var pgQuery = "SELECT * FROM teams WHERE teamId = $1 AND (creator = $2 OR other = $2)"
+
+        dbConnection.query(pgQuery, [teamId, email], function(error, response) {
+            console.log(error, response)
+
+            if(error) {
+                res.writeHead(400)
+                res.end()
+                return
+            }
+                
+            if(response.rows.length < 1) {
+                res.writeHead(400)
+                res.end()
+                return
+            }
+
+            var creator = response.rows[0].creator
+            var other = response.rows[0].other
+
+            res.writeHead(200, { 'Content-Type': 'application/json'})
+            res.end(JSON.stringify({
+                creator: creator,
+                other: other,
+            }))
+        })
+    }
+
+    else if(req.method == 'POST' && req.url.startsWith('/gateway/storage')) {
+        if(!authenticate(req)) {
+            res.writeHead(401)
+            res.end()
+            return
+        }
+
+        var email = urlArgs.email
+        var storage = urlArgs.storage
+        var region = urlArgs.region
+
+        if(!userStorage[email]) {
+            userStorage[email] = {}
+        }
+
+        userStorage[email][region] = storage
+
+        res.writeHead(200, { 'Content-Type': 'application/json'})
+        res.end(JSON.stringify({
+
+        }))
+    }
+
+    else if(req.method == 'GET' && req.url.startsWith('/gateway/storage')) {
+        if(!authenticate(req)) {
+            res.writeHead(401)
+            res.end()
+            return
+        }
+
+        var email = urlArgs.email
+
+        var storage = 0
+
+        if(userStorage[email]) {
+            Object.keys(userStorage[email]).forEach(function(region) {
+                storage += userStorage[email][region]
+            })
+        }
+
+        var pgQuery = "SELECT plan FROM users WHERE email = $1"
+
+        dbConnection.query(pgQuery, [email], function(error, response) {
+            console.log(error, response)
+
+            if(error) {
+                res.writeHead(400)
+                res.end()
+                return
+            }
+                
+            if(response.rows.length < 0) {
+                res.writeHead(400)
+                res.end()
+                return
+            }
+
+            var plan = response.rows[0].plan
+
+            var limit = {
+                free: 1024 * 1024,
+                standard: 1024 * 1024 * 1024,
+                pro: 10 * 1024 * 1024 * 1024,
+                enterprise: 40 * 1024 * 1024 * 1024,
+            }[plan]
+
+            res.writeHead(200, { 'Content-Type': 'application/json'})
+            res.end(JSON.stringify({
+                storage: storage,
+                limit: limit,
+                plan: plan,
+            }))
+        })
+    }
+
+    else {
+        res.writeHead(404)
+        res.end('Resource not found.')
+    }
+}
+
+function authenticate(req) {
+    if(!req.headers.authorization) {
+        return
+    }
+
+    var gatewaySecret = req.headers.authorization.slice(7)
+
+    if(gatewaySecret != process.env.GATEWAY_SECRET) {
+        return
+    }
+
+    return true
+}
